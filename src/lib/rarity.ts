@@ -9,6 +9,7 @@ export type RarityInfo = {
   rarityAvailable: boolean;
 };
 
+/** Percentile from OpenSea rank + collection size (max_rank / tokens scored). */
 export function percentileFromRank(
   rank: number | null | undefined,
   tokensScored: number | null | undefined,
@@ -18,6 +19,7 @@ export function percentileFromRank(
     tokensScored == null ||
     !Number.isFinite(rank) ||
     !Number.isFinite(tokensScored) ||
+    rank <= 0 ||
     tokensScored <= 0
   ) {
     return null;

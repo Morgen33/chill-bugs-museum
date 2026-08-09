@@ -17,18 +17,18 @@ const config = getDefaultConfig({
   ssr: true,
 });
 
-const limeTheme = darkTheme({
-  accentColor: "#b6ff3c",
-  accentColorForeground: "#0a0a0a",
-  borderRadius: "medium",
+const museumTheme = darkTheme({
+  accentColor: "#c4a46a",
+  accentColorForeground: "#1c1a17",
+  borderRadius: "small",
   fontStack: "system",
   overlayBlur: "small",
 });
 
-limeTheme.colors.modalBackground = "#121212";
-limeTheme.colors.modalBorder = "rgba(255,255,255,0.08)";
-limeTheme.colors.profileForeground = "#161616";
-limeTheme.colors.closeButtonBackground = "#1a1a1a";
+museumTheme.colors.modalBackground = "#1c1a17";
+museumTheme.colors.modalBorder = "rgba(196,164,106,0.22)";
+museumTheme.colors.profileForeground = "#2a2722";
+museumTheme.colors.closeButtonBackground = "#242119";
 
 export function WalletProvider({ children }: { children: ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
@@ -36,7 +36,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider theme={limeTheme} modalSize="compact">
+        <RainbowKitProvider theme={museumTheme} modalSize="compact">
           {children}
         </RainbowKitProvider>
       </QueryClientProvider>

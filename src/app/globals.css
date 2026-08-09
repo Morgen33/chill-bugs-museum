@@ -1,34 +1,44 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #0a0a0a;
-  --bg-elevated: #121212;
-  --bg-panel: #161616;
-  --fg: #f2f2f2;
-  --fg-muted: #8a8a8a;
-  --lime: #b6ff3c;
-  --lime-soft: rgba(182, 255, 60, 0.18);
-  --lime-glow: rgba(182, 255, 60, 0.45);
-  --gold: #ffe566;
-  --gold-glow: rgba(255, 229, 102, 0.5);
-  --border: rgba(255, 255, 255, 0.08);
-  --border-strong: rgba(255, 255, 255, 0.16);
-  --grid-line: rgba(255, 255, 255, 0.04);
-  --font-display: var(--font-space-grotesk);
+  --wall: #2a2722;
+  --wall-deep: #1c1a17;
+  --wall-lift: #35322c;
+  --marble: #5c3d32;
+  --marble-vein: #8a6a58;
+  --floor: #141210;
+  --fg: #f0e8d8;
+  --fg-muted: #a89a84;
+  --brass: #c4a46a;
+  --brass-deep: #8a7040;
+  --brass-soft: rgba(196, 164, 106, 0.22);
+  --gilt: #d4b87a;
+  --gilt-bright: #e8d4a0;
+  --velvet: #6e1f24;
+  --velvet-deep: #4a1216;
+  --spotlight: rgba(255, 236, 200, 0.14);
+  --border: rgba(196, 164, 106, 0.18);
+  --border-strong: rgba(196, 164, 106, 0.38);
+  --font-display: var(--font-cormorant);
+  --font-body: var(--font-figtree);
 }
 
 @theme inline {
-  --color-bg: var(--bg);
-  --color-bg-elevated: var(--bg-elevated);
-  --color-bg-panel: var(--bg-panel);
+  --color-wall: var(--wall);
+  --color-wall-deep: var(--wall-deep);
+  --color-wall-lift: var(--wall-lift);
+  --color-marble: var(--marble);
+  --color-floor: var(--floor);
   --color-fg: var(--fg);
   --color-fg-muted: var(--fg-muted);
-  --color-lime: var(--lime);
-  --color-lime-soft: var(--lime-soft);
-  --color-gold: var(--gold);
+  --color-brass: var(--brass);
+  --color-brass-deep: var(--brass-deep);
+  --color-gilt: var(--gilt);
+  --color-velvet: var(--velvet);
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
-  --font-sans: var(--font-space-grotesk);
+  --font-sans: var(--font-figtree);
+  --font-serif: var(--font-cormorant);
 }
 
 * {
@@ -42,56 +52,61 @@ body {
 
 body {
   margin: 0;
-  background: var(--bg);
+  background: var(--wall-deep);
   color: var(--fg);
-  font-family: var(--font-space-grotesk), system-ui, sans-serif;
+  font-family: var(--font-figtree), system-ui, sans-serif;
 }
 
-.museum-grid {
-  background-color: var(--bg);
+.museum-hall {
+  background-color: var(--wall);
   background-image:
-    linear-gradient(var(--grid-line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-  background-size: 48px 48px;
+    radial-gradient(ellipse 90% 55% at 50% 0%, var(--spotlight), transparent 55%),
+    radial-gradient(ellipse 60% 40% at 50% 100%, rgba(0, 0, 0, 0.55), transparent 55%),
+    linear-gradient(180deg, #322f29 0%, var(--wall) 28%, #242119 72%, var(--floor) 100%);
 }
 
-.museum-vignette {
+.museum-columns::before,
+.museum-columns::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: min(7vw, 72px);
+  opacity: 0.55;
   background:
-    radial-gradient(ellipse 80% 60% at 50% 35%, rgba(182, 255, 60, 0.06), transparent 55%),
-    radial-gradient(ellipse 100% 80% at 50% 100%, rgba(0, 0, 0, 0.85), transparent 50%),
-    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(255, 255, 255, 0.03), transparent 45%);
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.45),
+      transparent 35%,
+      transparent 65%,
+      rgba(0, 0, 0, 0.35)
+    ),
+    repeating-linear-gradient(
+      180deg,
+      var(--marble) 0px,
+      #6d4a3d 18px,
+      var(--marble-vein) 36px,
+      #4a2f28 54px,
+      var(--marble) 72px
+    );
+  box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.45);
 }
 
-@keyframes float-bug {
-  0%,
-  100% {
-    transform: translateY(0) rotate(-4deg);
-  }
-  50% {
-    transform: translateY(-12px) rotate(4deg);
-  }
+.museum-columns::before {
+  left: 0;
+  border-right: 1px solid rgba(196, 164, 106, 0.12);
 }
 
-@keyframes glow-breathe {
-  0%,
-  100% {
-    box-shadow:
-      0 0 18px var(--gold-glow),
-      0 0 48px rgba(182, 255, 60, 0.2),
-      inset 0 0 0 1px rgba(255, 229, 102, 0.35);
-  }
-  50% {
-    box-shadow:
-      0 0 28px var(--gold-glow),
-      0 0 72px rgba(182, 255, 60, 0.35),
-      inset 0 0 0 1px rgba(255, 229, 102, 0.55);
-  }
+.museum-columns::after {
+  right: 0;
+  border-left: 1px solid rgba(196, 164, 106, 0.12);
 }
 
 @keyframes hang-in {
   from {
     opacity: 0;
-    transform: translateY(-16px) scale(0.96);
+    transform: translateY(-14px) scale(0.97);
   }
   to {
     opacity: 1;
@@ -102,67 +117,288 @@ body {
 @keyframes sway {
   0%,
   100% {
-    transform: rotate(-0.4deg);
+    transform: rotate(-0.35deg);
   }
   50% {
-    transform: rotate(0.4deg);
+    transform: rotate(0.35deg);
   }
 }
 
-.float-bug {
-  animation: float-bug 5.5s ease-in-out infinite;
+@keyframes beam {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 0.85;
+  }
 }
 
-.glow-breathe {
-  animation: glow-breathe 3.2s ease-in-out infinite;
+@keyframes rope-settle {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .hang-in {
-  animation: hang-in 0.55s ease-out both;
+  animation: hang-in 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .sway {
-  animation: sway 6s ease-in-out infinite;
+  animation: sway 7s ease-in-out infinite;
+}
+
+.spotlight-beam {
+  animation: beam 5.5s ease-in-out infinite;
+}
+
+.rope-settle {
+  animation: rope-settle 0.8s ease-out 0.2s both;
+}
+
+/* Shared gilt metal — all gold; rarity scales size & molding weight */
+.frame-common,
+.frame-uncommon,
+.frame-rare,
+.frame-legendary,
+.frame-lightbox {
+  --frame-gilt: linear-gradient(
+    145deg,
+    #6e5228 0%,
+    #c9a45a 12%,
+    #f3e2a8 22%,
+    #a67c35 38%,
+    #e8d08a 52%,
+    #8b6914 68%,
+    #f6e6b0 82%,
+    #b8924a 92%,
+    #5c4318 100%
+  );
+  --frame-gilt-edge: linear-gradient(
+    180deg,
+    rgba(255, 236, 180, 0.55),
+    rgba(90, 60, 20, 0.35) 45%,
+    rgba(255, 230, 160, 0.4)
+  );
 }
 
 .frame-common {
-  --frame-pad: 8px;
-  --frame-radius: 14px;
-  --frame-border: 2px solid var(--border-strong);
-  --frame-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
-  width: clamp(140px, 22vw, 180px);
+  --frame-width: clamp(132px, 20vw, 168px);
+  --frame-outer: 14px;
+  --frame-mid: 3px;
+  --frame-inner: 5px;
+  --corner-size: 10px;
+  --frame-shadow:
+    0 16px 32px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(90, 60, 20, 0.45);
+  width: var(--frame-width);
 }
 
 .frame-uncommon {
-  --frame-pad: 10px;
-  --frame-radius: 16px;
-  --frame-border: 2px solid rgba(182, 255, 60, 0.35);
+  --frame-width: clamp(158px, 24vw, 200px);
+  --frame-outer: 18px;
+  --frame-mid: 4px;
+  --frame-inner: 6px;
+  --corner-size: 13px;
   --frame-shadow:
-    0 10px 28px rgba(0, 0, 0, 0.5),
-    0 0 20px var(--lime-soft);
-  width: clamp(160px, 26vw, 210px);
+    0 20px 40px rgba(0, 0, 0, 0.58),
+    0 0 0 1px rgba(200, 160, 80, 0.25);
+  width: var(--frame-width);
 }
 
 .frame-rare {
-  --frame-pad: 12px;
-  --frame-radius: 18px;
-  --frame-border: 2px solid rgba(182, 255, 60, 0.65);
+  --frame-width: clamp(190px, 30vw, 248px);
+  --frame-outer: 24px;
+  --frame-mid: 5px;
+  --frame-inner: 7px;
+  --corner-size: 16px;
   --frame-shadow:
-    0 14px 36px rgba(0, 0, 0, 0.55),
-    0 0 32px var(--lime-glow);
-  width: clamp(190px, 30vw, 250px);
+    0 24px 48px rgba(0, 0, 0, 0.62),
+    0 0 0 1px rgba(240, 210, 140, 0.35);
+  width: var(--frame-width);
 }
 
 .frame-legendary {
-  --frame-pad: 14px;
-  --frame-radius: 20px;
-  --frame-border: 2px solid rgba(255, 229, 102, 0.75);
+  --frame-width: clamp(230px, 38vw, 310px);
+  --frame-outer: 30px;
+  --frame-mid: 6px;
+  --frame-inner: 8px;
+  --corner-size: 20px;
   --frame-shadow:
-    0 18px 48px rgba(0, 0, 0, 0.6),
-    0 0 40px var(--gold-glow);
-  width: clamp(220px, 36vw, 300px);
+    0 30px 60px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(246, 230, 176, 0.45);
+  width: var(--frame-width);
+}
+
+.frame-lightbox {
+  --frame-outer: 22px;
+  --frame-mid: 5px;
+  --frame-inner: 7px;
+  --corner-size: 16px;
+  --frame-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
+  width: 100%;
+  height: 100%;
+}
+
+.ornate-frame {
+  position: relative;
+  padding: var(--frame-outer);
+  background: var(--frame-gilt);
+  box-shadow: var(--frame-shadow);
+}
+
+/* Outer bevel lip */
+.ornate-frame::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1px solid rgba(255, 236, 190, 0.45);
+  box-shadow:
+    inset 0 0 0 2px rgba(70, 45, 12, 0.55),
+    inset 0 0 12px rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Inner gold fillet around the mat */
+.ornate-frame::after {
+  content: "";
+  position: absolute;
+  inset: calc(var(--frame-outer) - 3px);
+  border: var(--frame-mid) solid #a67c35;
+  box-shadow:
+    inset 0 0 0 1px rgba(246, 230, 176, 0.55),
+    0 0 0 1px rgba(60, 40, 12, 0.55),
+    inset 0 0 10px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.ornate-frame__mat {
+  position: relative;
+  z-index: 1;
+  padding: var(--frame-inner);
+  background: linear-gradient(180deg, #1a1713 0%, #0e0c0a 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(196, 164, 106, 0.35),
+    inset 0 10px 22px rgba(0, 0, 0, 0.5);
+}
+
+/* Carved corner bosses */
+.frame-corner {
+  position: absolute;
+  z-index: 3;
+  width: var(--corner-size);
+  height: var(--corner-size);
+  background:
+    radial-gradient(circle at 35% 30%, #fff2c4 0%, #d4b06a 40%, #7a5a20 75%, #4a340f 100%);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 245, 210, 0.65);
+  pointer-events: none;
+}
+
+.frame-corner--tl {
+  top: calc(var(--frame-outer) * 0.28);
+  left: calc(var(--frame-outer) * 0.28);
+  clip-path: polygon(0 0, 100% 0, 100% 28%, 72% 28%, 72% 100%, 0 100%);
+}
+
+.frame-corner--tr {
+  top: calc(var(--frame-outer) * 0.28);
+  right: calc(var(--frame-outer) * 0.28);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 28% 100%, 28% 28%, 0 28%);
+}
+
+.frame-corner--bl {
+  bottom: calc(var(--frame-outer) * 0.28);
+  left: calc(var(--frame-outer) * 0.28);
+  clip-path: polygon(0 0, 72% 0, 72% 72%, 100% 72%, 100% 100%, 0 100%);
+}
+
+.frame-corner--br {
+  bottom: calc(var(--frame-outer) * 0.28);
+  right: calc(var(--frame-outer) * 0.28);
+  clip-path: polygon(28% 0, 100% 0, 100% 100%, 0 100%, 0 72%, 28% 72%);
+}
+
+.gallery-page-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 3rem;
+  height: 3rem;
+  padding: 0 1rem;
+  border: 1px solid var(--border-strong);
+  background: linear-gradient(180deg, #3a342c 0%, #241f19 100%);
+  color: var(--gilt);
+  font-family: var(--font-cormorant), serif;
+  font-size: 1.35rem;
+  line-height: 1;
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease,
+    background 0.2s ease;
+}
+
+.gallery-page-btn:hover:not(:disabled) {
+  border-color: var(--gilt);
+  color: var(--gilt-bright);
+  background: linear-gradient(180deg, #453e34 0%, #2c261f 100%);
+}
+
+.gallery-page-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.plaque {
+  background: linear-gradient(180deg, #b89a5e 0%, #8a7040 48%, #6e5630 100%);
+  color: #1c1610;
+  box-shadow:
+    0 2px 0 rgba(255, 236, 200, 0.25),
+    0 6px 14px rgba(0, 0, 0, 0.4);
+}
+
+.velvet-rope {
+  height: 7px;
+  border-radius: 999px;
+  background: linear-gradient(
+    180deg,
+    #8a2a30 0%,
+    var(--velvet) 40%,
+    var(--velvet-deep) 100%
+  );
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 180, 180, 0.18);
+}
+
+.stanchion {
+  width: 10px;
+  height: 42px;
+  border-radius: 999px 999px 3px 3px;
+  background: linear-gradient(90deg, #8a7040, #e0c994 45%, #6e5630);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.45);
+}
+
+.stanchion::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #f0e0b0, #8a7040 70%);
 }
 
 .rk-connect button {
-  font-family: var(--font-space-grotesk), system-ui, sans-serif !important;
+  font-family: var(--font-figtree), system-ui, sans-serif !important;
 }

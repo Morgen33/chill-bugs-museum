@@ -38,33 +38,43 @@ export function BugLightbox({ bug, onClose }: BugLightboxProps) {
     >
       <button
         type="button"
-        className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+        className="absolute inset-0 bg-wall-deep/85 backdrop-blur-sm"
         aria-label="Close"
         onClick={onClose}
       />
 
-      <div className="relative z-10 grid w-full max-w-3xl overflow-hidden rounded-2xl border border-border bg-bg-elevated shadow-[0_30px_80px_rgba(0,0,0,0.65)] md:grid-cols-[1.1fr_1fr]">
-        <div className="relative aspect-square bg-bg">
-          {bug.imageUrl ? (
-            <Image
-              src={bug.imageUrl}
-              alt={bug.name}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 420px"
-              unoptimized
-              priority
-            />
-          ) : null}
+      <div className="relative z-10 grid w-full max-w-3xl overflow-hidden border border-border bg-wall shadow-[0_30px_80px_rgba(0,0,0,0.65)] md:grid-cols-[1.1fr_1fr]">
+        <div className="relative aspect-square bg-wall-deep p-4 sm:p-5">
+          <div className="ornate-frame frame-lightbox">
+            <span aria-hidden className="frame-corner frame-corner--tl" />
+            <span aria-hidden className="frame-corner frame-corner--tr" />
+            <span aria-hidden className="frame-corner frame-corner--bl" />
+            <span aria-hidden className="frame-corner frame-corner--br" />
+            <div className="ornate-frame__mat h-full">
+              <div className="relative aspect-square overflow-hidden bg-wall-deep">
+                {bug.imageUrl ? (
+                  <Image
+                    src={bug.imageUrl}
+                    alt={bug.name}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 420px"
+                    unoptimized
+                    priority
+                  />
+                ) : null}
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="flex flex-col gap-5 p-6 sm:p-8">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-lime">
+            <p className="font-serif text-sm tracking-[0.22em] text-gilt uppercase">
               {tierLabel(tier)}
               {rarityAvailable ? ` · ${formatPercentile(percentile)}` : ""}
             </p>
-            <h2 className="mt-2 text-2xl font-bold uppercase tracking-tight text-fg sm:text-3xl">
+            <h2 className="mt-2 font-serif text-3xl font-semibold tracking-tight text-fg sm:text-4xl">
               {bug.name}
             </h2>
             {rarityAvailable && rank != null && (
@@ -82,9 +92,9 @@ export function BugLightbox({ bug, onClose }: BugLightboxProps) {
               {bug.traits.map((trait) => (
                 <div
                   key={`${trait.traitType}-${trait.value}`}
-                  className="rounded-xl border border-border bg-bg-panel px-3 py-2"
+                  className="border border-border bg-wall-deep/60 px-3 py-2"
                 >
-                  <p className="text-[10px] uppercase tracking-wider text-fg-muted">
+                  <p className="text-[10px] tracking-wider text-fg-muted uppercase">
                     {trait.traitType}
                   </p>
                   <p className="mt-0.5 truncate text-sm font-medium text-fg">
@@ -100,14 +110,14 @@ export function BugLightbox({ bug, onClose }: BugLightboxProps) {
               href={bug.openseaUrl}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center justify-center rounded-full bg-lime px-5 py-2.5 text-sm font-bold uppercase tracking-wider text-bg transition hover:brightness-110"
+              className="inline-flex items-center justify-center bg-brass px-5 py-2.5 text-sm font-semibold tracking-[0.12em] text-wall-deep uppercase transition hover:bg-gilt"
             >
               View on OpenSea
             </a>
             <button
               type="button"
               onClick={onClose}
-              className="inline-flex items-center justify-center rounded-full border border-border-strong px-5 py-2.5 text-sm font-semibold uppercase tracking-wider text-fg transition hover:border-lime/50"
+              className="inline-flex items-center justify-center border border-border-strong px-5 py-2.5 text-sm font-semibold tracking-[0.12em] text-fg uppercase transition hover:border-gilt hover:text-gilt"
             >
               Close
             </button>

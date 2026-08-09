@@ -1,10 +1,16 @@
 import type { Metadata } from "next";
-import { Space_Grotesk } from "next/font/google";
+import { Cormorant_Garamond, Figtree } from "next/font/google";
 import { WalletProvider } from "@/components/WalletProvider";
 import "./globals.css";
 
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
+const cormorant = Cormorant_Garamond({
+  variable: "--font-cormorant",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const figtree = Figtree({
+  variable: "--font-figtree",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
@@ -12,13 +18,16 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   title: "Chill Bugs Museum",
   description:
-    "Connect your wallet and hang your Chill Bugs on a personal museum wall — rarer bugs get bigger, glowing frames.",
+    "Connect your wallet and hang your Chill Bugs in a personal gallery wing — rarer bugs earn the grander gilt frames.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${spaceGrotesk.variable} h-full antialiased`}>
-      <body className="min-h-full bg-bg font-sans text-fg">
+    <html
+      lang="en"
+      className={`${cormorant.variable} ${figtree.variable} h-full antialiased`}
+    >
+      <body className="min-h-full bg-wall-deep font-sans text-fg">
         <WalletProvider>{children}</WalletProvider>
       </body>
     </html>
