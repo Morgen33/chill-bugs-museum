@@ -1,58 +1,69 @@
 "use client";
 
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import Image from "next/image";
 
 export function MuseumHero() {
   return (
-    <section className="relative flex min-h-[78vh] flex-col items-center justify-center px-4 pb-16 pt-28 text-center sm:px-6">
-      <span
-        aria-hidden
-        className="float-bug pointer-events-none absolute left-[8%] top-[22%] text-3xl opacity-70 sm:text-4xl"
-      >
-        🦋
-      </span>
-      <span
-        aria-hidden
-        className="float-bug pointer-events-none absolute right-[10%] top-[30%] text-2xl opacity-50 sm:text-3xl"
-        style={{ animationDelay: "1.2s" }}
-      >
-        🦗
-      </span>
-      <span
-        aria-hidden
-        className="float-bug pointer-events-none absolute bottom-[18%] left-[18%] text-2xl opacity-40"
-        style={{ animationDelay: "2.4s" }}
-      >
-        🐞
-      </span>
+    <section className="relative min-h-[100svh] overflow-hidden">
+      <Image
+        src="/museum-hero.png"
+        alt="Chill Bugs gallery hall with gilt frames and velvet rope"
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover object-[center_42%]"
+      />
 
-      <p className="inline-flex items-center gap-2 rounded-full border border-border bg-bg-panel/80 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-fg-muted">
-        <span className="size-1.5 rounded-full bg-lime shadow-[0_0_8px_var(--lime-glow)]" />
-        Personal museum · Now open
-      </p>
+      <div
+        aria-hidden
+        className="spotlight-beam absolute inset-x-0 top-0 h-[55%] bg-[radial-gradient(ellipse_70%_55%_at_50%_0%,rgba(255,236,200,0.18),transparent_70%)]"
+      />
 
-      <h1 className="mt-6 max-w-4xl text-5xl font-bold uppercase leading-[0.95] tracking-tight text-fg sm:text-7xl md:text-8xl">
-        <span className="block text-lime drop-shadow-[0_0_28px_var(--lime-glow)]">
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-gradient-to-t from-wall-deep via-wall-deep/75 to-wall-deep/35"
+      />
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-[radial-gradient(ellipse_90%_70%_at_50%_40%,transparent_20%,rgba(14,12,10,0.55)_100%)]"
+      />
+
+      <div className="relative z-10 flex min-h-[100svh] flex-col items-center justify-end px-5 pb-16 pt-28 text-center sm:pb-20 sm:pt-32">
+        <p className="font-serif text-sm tracking-[0.28em] text-gilt uppercase sm:text-base">
+          Now open
+        </p>
+
+        <h1 className="mt-3 max-w-4xl font-serif text-[clamp(3.25rem,12vw,7.5rem)] leading-[0.9] font-semibold tracking-tight text-fg">
           Chill Bugs
-        </span>
-        <span className="mt-2 block text-fg/90">Museum</span>
-      </h1>
+          <span className="mt-1 block font-medium text-gilt">Museum</span>
+        </h1>
 
-      <p className="mt-6 max-w-md text-base text-fg-muted sm:text-lg">
-        Connect your wallet. Your bugs hang on the wall — rarer ones get the
-        bigger, glowing frames.
-      </p>
+        <p className="mt-5 max-w-md text-base leading-relaxed text-fg-muted sm:text-lg">
+          Connect your wallet. Your collection hangs in a private wing — rarer
+          bugs earn the grander gilt frames.
+        </p>
 
-      <div className="rk-connect mt-10">
-        <ConnectButton
-          chainStatus="icon"
-          showBalance={false}
-          accountStatus={{
-            smallScreen: "avatar",
-            largeScreen: "full",
-          }}
-          label="Connect wallet"
-        />
+        <div className="rk-connect mt-8">
+          <ConnectButton
+            chainStatus="icon"
+            showBalance={false}
+            accountStatus={{
+              smallScreen: "avatar",
+              largeScreen: "full",
+            }}
+            label="Enter the gallery"
+          />
+        </div>
+
+        <div
+          aria-hidden
+          className="rope-settle mt-12 flex w-full max-w-sm items-end justify-between px-2"
+        >
+          <span className="stanchion relative" />
+          <span className="velvet-rope mb-7 flex-1 mx-1" />
+          <span className="stanchion relative" />
+        </div>
       </div>
     </section>
   );

@@ -29,22 +29,23 @@ export function MuseumApp() {
   });
 
   return (
-    <div className="museum-grid museum-vignette relative min-h-screen">
-      <header className="fixed inset-x-0 top-0 z-40 border-b border-border/60 bg-bg/70 backdrop-blur-md">
+    <div className="museum-hall museum-columns relative min-h-screen">
+      <header className="fixed inset-x-0 top-0 z-40 border-b border-border/50 bg-wall-deep/55 backdrop-blur-md">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:h-16 sm:px-6">
-          <Link
-            href="/"
-            className="flex items-center gap-2 font-bold uppercase tracking-[0.12em]"
-          >
-            <span aria-hidden>🐛</span>
-            <span className="text-sm sm:text-base">Chill Bugs</span>
+          <Link href="/" className="flex items-baseline gap-2">
+            <span className="font-serif text-lg font-semibold tracking-tight text-fg sm:text-xl">
+              Chill Bugs
+            </span>
+            <span className="hidden font-serif text-sm tracking-[0.2em] text-gilt uppercase sm:inline">
+              Museum
+            </span>
           </Link>
-          <nav className="hidden items-center gap-6 text-xs font-semibold uppercase tracking-[0.16em] text-fg-muted sm:flex">
+          <nav className="hidden items-center gap-7 text-[11px] font-semibold tracking-[0.18em] text-fg-muted uppercase sm:flex">
             <a
               href={OPENSEA_COLLECTION_URL}
               target="_blank"
               rel="noreferrer"
-              className="transition hover:text-lime"
+              className="transition hover:text-gilt"
             >
               Collection
             </a>
@@ -52,7 +53,7 @@ export function MuseumApp() {
               href="https://chillbugs.xyz"
               target="_blank"
               rel="noreferrer"
-              className="transition hover:text-lime"
+              className="transition hover:text-gilt"
             >
               Playground
             </a>
@@ -80,7 +81,7 @@ export function MuseumApp() {
         </div>
       )}
 
-      <footer className="border-t border-border/60 px-4 py-8 text-center text-xs uppercase tracking-[0.16em] text-fg-muted">
+      <footer className="border-t border-border/50 px-4 py-8 text-center text-[11px] tracking-[0.18em] text-fg-muted uppercase">
         Chill Bugs Museum · Unofficial holder gallery
       </footer>
     </div>
