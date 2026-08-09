@@ -12,7 +12,7 @@ export function MuseumHero() {
         fill
         priority
         sizes="100vw"
-        className="object-cover object-[center_42%]"
+        className="object-cover object-[center_28%] scale-105"
       />
 
       <div
@@ -22,11 +22,15 @@ export function MuseumHero() {
 
       <div
         aria-hidden
-        className="absolute inset-0 bg-gradient-to-t from-wall-deep via-wall-deep/75 to-wall-deep/35"
+        className="absolute inset-0 bg-gradient-to-t from-wall-deep via-wall-deep/80 to-wall-deep/30"
       />
       <div
         aria-hidden
-        className="absolute inset-0 bg-[radial-gradient(ellipse_90%_70%_at_50%_40%,transparent_20%,rgba(14,12,10,0.55)_100%)]"
+        className="absolute inset-0 bg-[radial-gradient(ellipse_90%_70%_at_50%_35%,transparent_15%,rgba(14,12,10,0.62)_100%)]"
+      />
+      <div
+        aria-hidden
+        className="absolute inset-x-0 bottom-0 h-[42%] bg-gradient-to-t from-wall-deep via-wall-deep/90 to-transparent"
       />
 
       <div className="relative z-10 flex min-h-[100svh] flex-col items-center justify-end px-5 pb-16 pt-28 text-center sm:pb-20 sm:pt-32">

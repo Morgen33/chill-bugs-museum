@@ -4,6 +4,8 @@ import { CHILLBUGS_CONTRACT, CHILLBUGS_SLUG } from "@/lib/constants";
 import { buildRarityInfo } from "@/lib/rarity";
 import type { BugTrait, ChillBug } from "@/lib/types";
 
+export const maxDuration = 60;
+
 type OpenSeaTrait = {
   trait_type?: string;
   value?: string | number | boolean;
@@ -32,6 +34,18 @@ type OpenSeaListResponse = {
   next?: string | null;
 };
 
+type OpenSeaCollectionResponse = {
+  collection?: {
+    total_supply?: number | null;
+    rarity?: {
+      max_rank?: number | null;
+      total_supply?: number | null;
+    } | null;
+  };
+};
+
+const DETAIL_CONCURRENCY = 12;
+
 function mapTraits(traits: OpenSeaTrait[] | null | undefined): BugTrait[] {
   if (!traits?.length) return [];
   return traits
@@ -42,14 +56,29 @@ function mapTraits(traits: OpenSeaTrait[] | null | undefined): BugTrait[] {
     }));
 }
 
-function mapNft(nft: OpenSeaNft): ChillBug | null {
+function resolveTokensScored(
+  rarity: OpenSeaRarity | null | undefined,
+  collectionTokensScored: number | null,
+): number | null {
+  return (
+    rarity?.tokens_scored ??
+    rarity?.max_rank ??
+    collectionTokensScored ??
+    null
+  );
+}
+
+function mapNft(
+  nft: OpenSeaNft,
+  collectionTokensScored: number | null,
+): ChillBug | null {
   const tokenId = nft.identifier;
   if (!tokenId) return null;
 
   const imageUrl = nft.display_image_url || nft.image_url || "";
   const rarity = buildRarityInfo(
     nft.rarity?.rank,
-    nft.rarity?.tokens_scored ?? nft.rarity?.max_rank,
+    resolveTokensScored(nft.rarity, collectionTokensScored),
   );
 
   return {
@@ -64,7 +93,56 @@ function mapNft(nft: OpenSeaNft): ChillBug | null {
   };
 }
 
+async function fetchCollectionTokensScored(
+  apiKey: string,
+): Promise<number | null> {
+  const res = await fetch(
+    `https://api.opensea.io/api/v2/collections/${CHILLBUGS_SLUG}`,
+    {
+      headers: {
+        Accept: "application/json",
+        "X-API-KEY": apiKey,
+      },
+      next: { revalidate: 3600 },
+    },
+  );
+
+  if (!res.ok) return null;
+
+  const data = (await res.json()) as OpenSeaCollectionResponse;
+  const scored =
+    data.collection?.rarity?.max_rank ??
+    data.collection?.rarity?.total_supply ??
+    data.collection?.total_supply ??
+    null;
+
+  return typeof scored === "number" && scored > 0 ? scored : null;
+}
+
+async function mapPool<T>(
+  items: T[],
+  concurrency: number,
+  worker: (item: T) => Promise<void>,
+): Promise<void> {
+  let cursor = 0;
+
+  async function run(): Promise<void> {
+    while (cursor < items.length) {
+      const index = cursor;
+      cursor += 1;
+      await worker(items[index]!);
+    }
+  }
+
+  const runners = Array.from(
+    { length: Math.min(concurrency, Math.max(items.length, 1)) },
+    () => run(),
+  );
+  await Promise.all(runners);
+}
+
 async function fetchOwnedBugs(address: string, apiKey: string): Promise<ChillBug[]> {
+  const collectionTokensScored = await fetchCollectionTokensScored(apiKey);
   const bugs: ChillBug[] = [];
   let next: string | null | undefined = null;
 
@@ -95,44 +173,42 @@ async function fetchOwnedBugs(address: string, apiKey: string): Promise<ChillBug
     for (const nft of data.nfts ?? []) {
       const contract = nft.contract?.toLowerCase();
       if (contract && contract !== CHILLBUGS_CONTRACT) continue;
-      const mapped = mapNft(nft);
+      const mapped = mapNft(nft, collectionTokensScored);
       if (mapped) bugs.push(mapped);
     }
     next = data.next;
   } while (next);
 
-  // Enrich rarity when list endpoint omits it
+  // Account list omits rarity — enrich every token from the detail endpoint
   const needsRarity = bugs.filter((b) => !b.rarity.rarityAvailable);
-  await Promise.all(
-    needsRarity.slice(0, 40).map(async (bug) => {
-      try {
-        const detailUrl = `https://api.opensea.io/api/v2/chain/ethereum/contract/${CHILLBUGS_CONTRACT}/nfts/${bug.tokenId}`;
-        const res = await fetch(detailUrl, {
-          headers: {
-            Accept: "application/json",
-            "X-API-KEY": apiKey,
-          },
-          next: { revalidate: 300 },
-        });
-        if (!res.ok) return;
-        const json = (await res.json()) as { nft?: OpenSeaNft };
-        const nft = json.nft;
-        if (!nft) return;
-        bug.rarity = buildRarityInfo(
-          nft.rarity?.rank,
-          nft.rarity?.tokens_scored ?? nft.rarity?.max_rank,
-        );
-        if (nft.traits?.length && bug.traits.length === 0) {
-          bug.traits = mapTraits(nft.traits);
-        }
-        if (!bug.imageUrl) {
-          bug.imageUrl = nft.display_image_url || nft.image_url || "";
-        }
-      } catch {
-        // Keep common-tier fallback
+  await mapPool(needsRarity, DETAIL_CONCURRENCY, async (bug) => {
+    try {
+      const detailUrl = `https://api.opensea.io/api/v2/chain/ethereum/contract/${CHILLBUGS_CONTRACT}/nfts/${bug.tokenId}`;
+      const res = await fetch(detailUrl, {
+        headers: {
+          Accept: "application/json",
+          "X-API-KEY": apiKey,
+        },
+        next: { revalidate: 300 },
+      });
+      if (!res.ok) return;
+      const json = (await res.json()) as { nft?: OpenSeaNft };
+      const nft = json.nft;
+      if (!nft) return;
+      bug.rarity = buildRarityInfo(
+        nft.rarity?.rank,
+        resolveTokensScored(nft.rarity, collectionTokensScored),
+      );
+      if (nft.traits?.length && bug.traits.length === 0) {
+        bug.traits = mapTraits(nft.traits);
       }
-    }),
-  );
+      if (!bug.imageUrl) {
+        bug.imageUrl = nft.display_image_url || nft.image_url || "";
+      }
+    } catch {
+      // Keep common-tier fallback
+    }
+  });
 
   bugs.sort((a, b) => {
     const ap = a.rarity.percentile ?? Number.POSITIVE_INFINITY;

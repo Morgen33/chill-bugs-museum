@@ -45,9 +45,13 @@ export function BugLightbox({ bug, onClose }: BugLightboxProps) {
 
       <div className="relative z-10 grid w-full max-w-3xl overflow-hidden border border-border bg-wall shadow-[0_30px_80px_rgba(0,0,0,0.65)] md:grid-cols-[1.1fr_1fr]">
         <div className="relative aspect-square bg-wall-deep p-4 sm:p-5">
-          <div className="ornate-frame frame-rare h-full">
+          <div className="ornate-frame frame-lightbox">
+            <span aria-hidden className="frame-corner frame-corner--tl" />
+            <span aria-hidden className="frame-corner frame-corner--tr" />
+            <span aria-hidden className="frame-corner frame-corner--bl" />
+            <span aria-hidden className="frame-corner frame-corner--br" />
             <div className="ornate-frame__mat h-full">
-              <div className="relative aspect-square h-full overflow-hidden bg-wall-deep">
+              <div className="relative aspect-square overflow-hidden bg-wall-deep">
                 {bug.imageUrl ? (
                   <Image
                     src={bug.imageUrl}

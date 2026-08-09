@@ -25,16 +25,21 @@ export function BugFrame({ bug, index, onSelect }: BugFrameProps) {
       type="button"
       onClick={() => onSelect(bug)}
       className={`group relative hang-in sway ${tierClass[tier]} text-left outline-none`}
-      style={{ animationDelay: `${Math.min(index, 12) * 70}ms` }}
+      style={{ animationDelay: `${Math.min(index, 8) * 70}ms` }}
       aria-label={`${bug.name}, ${tierLabel(tier)}`}
     >
       <div className="relative">
         <div
           aria-hidden
-          className="pointer-events-none absolute -top-8 left-1/2 h-10 w-[70%] -translate-x-1/2 bg-[radial-gradient(ellipse_at_center,rgba(255,236,200,0.28),transparent_70%)] opacity-70 transition-opacity duration-300 group-hover:opacity-100"
+          className="pointer-events-none absolute -top-9 left-1/2 h-12 w-[75%] -translate-x-1/2 bg-[radial-gradient(ellipse_at_center,rgba(255,236,200,0.32),transparent_70%)] opacity-65 transition-opacity duration-300 group-hover:opacity-100"
         />
 
         <div className="ornate-frame transition-transform duration-300 group-hover:-translate-y-1.5 group-focus-visible:-translate-y-1.5">
+          <span aria-hidden className="frame-corner frame-corner--tl" />
+          <span aria-hidden className="frame-corner frame-corner--tr" />
+          <span aria-hidden className="frame-corner frame-corner--bl" />
+          <span aria-hidden className="frame-corner frame-corner--br" />
+
           <div className="ornate-frame__mat">
             <div className="relative aspect-square overflow-hidden bg-wall-deep">
               {bug.imageUrl ? (
@@ -42,7 +47,7 @@ export function BugFrame({ bug, index, onSelect }: BugFrameProps) {
                   src={bug.imageUrl}
                   alt={bug.name}
                   fill
-                  sizes="(max-width: 768px) 45vw, 250px"
+                  sizes="(max-width: 768px) 45vw, 310px"
                   className="object-cover"
                   unoptimized
                 />
@@ -65,12 +70,6 @@ export function BugFrame({ bug, index, onSelect }: BugFrameProps) {
             {rarityAvailable ? ` · ${formatPercentile(percentile)}` : ""}
           </p>
         </div>
-
-        {!rarityAvailable && (
-          <p className="mt-1.5 text-center text-[9px] tracking-wider text-fg-muted/70 uppercase">
-            Rarity unavailable
-          </p>
-        )}
       </div>
     </button>
   );

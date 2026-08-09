@@ -28,8 +28,15 @@ export function MuseumApp() {
     staleTime: 60_000,
   });
 
+  const inGallery = Boolean(isConnected && address);
+
   return (
-    <div className="museum-hall museum-columns relative min-h-screen">
+    <div
+      className={[
+        "relative min-h-screen",
+        inGallery ? "museum-hall museum-columns" : "bg-wall-deep",
+      ].join(" ")}
+    >
       <header className="fixed inset-x-0 top-0 z-40 border-b border-border/50 bg-wall-deep/55 backdrop-blur-md">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:h-16 sm:px-6">
           <Link href="/" className="flex items-baseline gap-2">
@@ -68,7 +75,7 @@ export function MuseumApp() {
         </div>
       </header>
 
-      {!isConnected || !address ? (
+      {!inGallery ? (
         <MuseumHero />
       ) : (
         <div className="pt-16">
@@ -76,12 +83,17 @@ export function MuseumApp() {
             bugs={query.data ?? []}
             loading={query.isLoading || query.isFetching}
             error={query.error ? query.error.message : null}
-            address={address}
+            address={address!}
           />
         </div>
       )}
 
-      <footer className="border-t border-border/50 px-4 py-8 text-center text-[11px] tracking-[0.18em] text-fg-muted uppercase">
+      <footer
+        className={[
+          "border-t border-border/50 px-4 py-8 text-center text-[11px] tracking-[0.18em] text-fg-muted uppercase",
+          !inGallery ? "relative z-10 -mt-px bg-wall-deep/80" : "",
+        ].join(" ")}
+      >
         Chill Bugs Museum · Unofficial holder gallery
       </footer>
     </div>
