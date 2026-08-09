@@ -1,0 +1,177 @@
+import { NextRequest, NextResponse } from "next/server";
+import { isAddress } from "viem";
+import { CHILLBUGS_CONTRACT, CHILLBUGS_SLUG } from "@/lib/constants";
+import { buildRarityInfo } from "@/lib/rarity";
+import type { BugTrait, ChillBug } from "@/lib/types";
+
+type OpenSeaTrait = {
+  trait_type?: string;
+  value?: string | number | boolean;
+};
+
+type OpenSeaRarity = {
+  rank?: number | null;
+  tokens_scored?: number | null;
+  max_rank?: number | null;
+};
+
+type OpenSeaNft = {
+  identifier?: string;
+  name?: string | null;
+  image_url?: string | null;
+  display_image_url?: string | null;
+  opensea_url?: string | null;
+  collection?: string;
+  contract?: string;
+  traits?: OpenSeaTrait[] | null;
+  rarity?: OpenSeaRarity | null;
+};
+
+type OpenSeaListResponse = {
+  nfts?: OpenSeaNft[];
+  next?: string | null;
+};
+
+function mapTraits(traits: OpenSeaTrait[] | null | undefined): BugTrait[] {
+  if (!traits?.length) return [];
+  return traits
+    .filter((t) => t.trait_type && t.value != null)
+    .map((t) => ({
+      traitType: String(t.trait_type),
+      value: String(t.value),
+    }));
+}
+
+function mapNft(nft: OpenSeaNft): ChillBug | null {
+  const tokenId = nft.identifier;
+  if (!tokenId) return null;
+
+  const imageUrl = nft.display_image_url || nft.image_url || "";
+  const rarity = buildRarityInfo(
+    nft.rarity?.rank,
+    nft.rarity?.tokens_scored ?? nft.rarity?.max_rank,
+  );
+
+  return {
+    tokenId,
+    name: nft.name?.trim() || `CHILL BUGS #${tokenId}`,
+    imageUrl,
+    openseaUrl:
+      nft.opensea_url ||
+      `https://opensea.io/item/ethereum/${CHILLBUGS_CONTRACT}/${tokenId}`,
+    traits: mapTraits(nft.traits),
+    rarity,
+  };
+}
+
+async function fetchOwnedBugs(address: string, apiKey: string): Promise<ChillBug[]> {
+  const bugs: ChillBug[] = [];
+  let next: string | null | undefined = null;
+
+  do {
+    const url = new URL(
+      `https://api.opensea.io/api/v2/chain/ethereum/account/${address}/nfts`,
+    );
+    url.searchParams.set("collection", CHILLBUGS_SLUG);
+    url.searchParams.set("limit", "50");
+    if (next) url.searchParams.set("next", next);
+
+    const res = await fetch(url.toString(), {
+      headers: {
+        Accept: "application/json",
+        "X-API-KEY": apiKey,
+      },
+      next: { revalidate: 60 },
+    });
+
+    if (!res.ok) {
+      const body = await res.text();
+      throw new Error(
+        `OpenSea request failed (${res.status}): ${body.slice(0, 200)}`,
+      );
+    }
+
+    const data = (await res.json()) as OpenSeaListResponse;
+    for (const nft of data.nfts ?? []) {
+      const contract = nft.contract?.toLowerCase();
+      if (contract && contract !== CHILLBUGS_CONTRACT) continue;
+      const mapped = mapNft(nft);
+      if (mapped) bugs.push(mapped);
+    }
+    next = data.next;
+  } while (next);
+
+  // Enrich rarity when list endpoint omits it
+  const needsRarity = bugs.filter((b) => !b.rarity.rarityAvailable);
+  await Promise.all(
+    needsRarity.slice(0, 40).map(async (bug) => {
+      try {
+        const detailUrl = `https://api.opensea.io/api/v2/chain/ethereum/contract/${CHILLBUGS_CONTRACT}/nfts/${bug.tokenId}`;
+        const res = await fetch(detailUrl, {
+          headers: {
+            Accept: "application/json",
+            "X-API-KEY": apiKey,
+          },
+          next: { revalidate: 300 },
+        });
+        if (!res.ok) return;
+        const json = (await res.json()) as { nft?: OpenSeaNft };
+        const nft = json.nft;
+        if (!nft) return;
+        bug.rarity = buildRarityInfo(
+          nft.rarity?.rank,
+          nft.rarity?.tokens_scored ?? nft.rarity?.max_rank,
+        );
+        if (nft.traits?.length && bug.traits.length === 0) {
+          bug.traits = mapTraits(nft.traits);
+        }
+        if (!bug.imageUrl) {
+          bug.imageUrl = nft.display_image_url || nft.image_url || "";
+        }
+      } catch {
+        // Keep common-tier fallback
+      }
+    }),
+  );
+
+  bugs.sort((a, b) => {
+    const ap = a.rarity.percentile ?? Number.POSITIVE_INFINITY;
+    const bp = b.rarity.percentile ?? Number.POSITIVE_INFINITY;
+    if (ap !== bp) return ap - bp;
+    return Number(a.tokenId) - Number(b.tokenId);
+  });
+
+  return bugs;
+}
+
+export async function GET(request: NextRequest) {
+  const address = request.nextUrl.searchParams.get("address")?.trim();
+
+  if (!address || !isAddress(address)) {
+    return NextResponse.json({ error: "Valid wallet address required" }, { status: 400 });
+  }
+
+  const apiKey = process.env.OPENSEA_API_KEY;
+  if (!apiKey) {
+    return NextResponse.json(
+      {
+        error:
+          "OPENSEA_API_KEY is not configured. Add it to .env.local to load Chill Bugs.",
+      },
+      { status: 503 },
+    );
+  }
+
+  try {
+    const bugs = await fetchOwnedBugs(address.toLowerCase(), apiKey);
+    return NextResponse.json({
+      address: address.toLowerCase(),
+      bugs,
+      count: bugs.length,
+    });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Failed to fetch bugs";
+    console.error("[api/bugs]", message);
+    return NextResponse.json({ error: message }, { status: 502 });
+  }
+}
