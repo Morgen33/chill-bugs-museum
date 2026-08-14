@@ -3,6 +3,7 @@
 import {
   useEffect,
   useMemo,
+  useRef,
   useState,
   type CSSProperties,
   type ReactNode,
@@ -26,11 +27,18 @@ type MuseumWallProps = {
 
 function TrackRail() {
   return (
-    <div className="gallery-track mt-3 sm:mt-5" aria-hidden>
-      {Array.from({ length: WALL_COLUMNS }).map((_, i) => (
-        <span key={i} className="gallery-track__spot" />
-      ))}
-    </div>
+    <>
+      <div className="gallery-track mt-3 sm:mt-5" aria-hidden>
+        {Array.from({ length: WALL_COLUMNS }).map((_, i) => (
+          <span key={i} className="gallery-track__spot" />
+        ))}
+      </div>
+      <div className="gallery-beams" aria-hidden>
+        {Array.from({ length: WALL_COLUMNS }).map((_, i) => (
+          <span key={i} className="gallery-beam" />
+        ))}
+      </div>
+    </>
   );
 }
 
@@ -55,16 +63,49 @@ function HangGrid({
   rows: number;
   children: ReactNode;
 }) {
+  const stageRef = useRef<HTMLDivElement>(null);
+  const [cell, setCell] = useState(320);
+
+  useEffect(() => {
+    const stage = stageRef.current;
+    if (!stage) return;
+
+    const measure = () => {
+      const gap = Math.min(28, Math.max(14, stage.clientWidth * 0.018));
+      const maxFrame = Math.min(
+        420,
+        Math.round(Math.min(window.innerWidth, window.innerHeight) * 0.52),
+      );
+      const stageW = Math.max(stage.clientWidth, 160);
+      const stageH =
+        stage.clientHeight > 160
+          ? stage.clientHeight
+          : window.innerHeight * 0.5;
+      const cellW = (stageW - (cols - 1) * gap) / cols;
+      const cellH = (stageH - (rows - 1) * gap) / rows;
+      const minCell = cols <= 2 && rows <= 2 ? 240 : 64;
+      const fitted = Math.min(maxFrame, cellW, cellH);
+      setCell(Math.floor(Math.max(minCell, fitted > 1 ? fitted : minCell)));
+    };
+
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(stage);
+    window.addEventListener("resize", measure);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, [cols, rows]);
+
   return (
-    <div className="hang-stage relative z-10 mx-auto w-full max-w-[86rem]">
+    <div
+      ref={stageRef}
+      className="hang-stage relative z-10 mx-auto w-full max-w-[86rem]"
+    >
       <div
         className="gallery-hang"
-        style={
-          {
-            "--hang-cols": cols,
-            "--hang-rows": rows,
-          } as CSSProperties
-        }
+        style={{ "--cell": `${cell}px` } as CSSProperties}
       >
         {children}
       </div>
@@ -90,11 +131,6 @@ export function MuseumWall({ bugs, loading, error, address }: MuseumWallProps) {
   const [selected, setSelected] = useState<ChillBug | null>(null);
   const [page, setPage] = useState(0);
   const maxCols = useMaxHangCols();
-
-  const short = useMemo(
-    () => `${address.slice(0, 6)}…${address.slice(-4)}`,
-    [address],
-  );
 
   const pageCount = Math.max(1, Math.ceil(bugs.length / WALL_PAGE_SIZE));
   const safePage = Math.min(page, pageCount - 1);
@@ -201,12 +237,6 @@ export function MuseumWall({ bugs, loading, error, address }: MuseumWallProps) {
 
   return (
     <GalleryShell>
-      <div className="relative z-10 mt-5 mb-3 text-center sm:mt-6">
-        <p className="font-serif text-sm tracking-[0.28em] text-gilt uppercase">
-          {short} · {bugs.length} work{bugs.length === 1 ? "" : "s"}
-        </p>
-      </div>
-
       <HangGrid cols={layout.cols} rows={layout.rows}>
         {pageBugs.map((bug, index) => (
           <BugFrame
