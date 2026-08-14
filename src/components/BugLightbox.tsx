@@ -31,7 +31,7 @@ export function BugLightbox({ bug, onClose }: BugLightboxProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8"
+      className="bug-lightbox fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8"
       role="dialog"
       aria-modal="true"
       aria-label={bug.name}

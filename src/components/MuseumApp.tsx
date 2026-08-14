@@ -33,8 +33,8 @@ export function MuseumApp() {
   return (
     <div
       className={[
-        "relative min-h-screen",
-        inGallery ? "museum-hall museum-columns" : "bg-wall-deep",
+        "relative flex min-h-screen flex-col",
+        inGallery ? "gallery-room" : "bg-wall-deep",
       ].join(" ")}
     >
       <header className="fixed inset-x-0 top-0 z-40 border-b border-border/50 bg-wall-deep/55 backdrop-blur-md">
@@ -78,7 +78,7 @@ export function MuseumApp() {
       {!inGallery ? (
         <MuseumHero />
       ) : (
-        <div className="pt-16">
+        <div className="flex min-h-0 flex-1 flex-col pt-14 sm:pt-16">
           <MuseumWall
             bugs={query.data ?? []}
             loading={query.isLoading || query.isFetching}
@@ -90,8 +90,10 @@ export function MuseumApp() {
 
       <footer
         className={[
-          "border-t border-border/50 px-4 py-8 text-center text-[11px] tracking-[0.18em] text-fg-muted uppercase",
-          !inGallery ? "relative z-10 -mt-px bg-wall-deep/80" : "",
+          "px-4 py-6 text-center text-[11px] tracking-[0.18em] text-fg-muted uppercase",
+          inGallery
+            ? "gallery-floor border-0"
+            : "relative z-10 -mt-px border-t border-border/50 bg-wall-deep/80 py-8",
         ].join(" ")}
       >
         Chill Bugs Museum · Unofficial holder gallery
