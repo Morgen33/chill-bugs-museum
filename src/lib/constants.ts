@@ -7,6 +7,10 @@ export const CHILLBUGS_SLUG = "the-chillbugs";
 export const OPENSEA_COLLECTION_URL =
   "https://opensea.io/collection/the-chillbugs";
 
+export const SITE_URL = (
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://chill-bugs-museum.vercel.app"
+).replace(/\/$/, "");
+
 /** Full wall hang: 8 columns × 4 rows, matching the gallery reference. */
 export const WALL_COLUMNS = 8;
 export const WALL_ROWS = 4;

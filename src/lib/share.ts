@@ -1,5 +1,6 @@
 import type { ChillBug } from "./types";
 import { formatPercentile, tierLabel } from "./rarity";
+import { SITE_URL } from "./constants";
 
 type XIntentParams = {
   text: string;
@@ -26,10 +27,14 @@ export function bugShareText(bug: ChillBug): string {
   return `Just hung ${bug.name} in my Chill Bugs Museum — ${rarity}`;
 }
 
+export function bugSharePageUrl(tokenId: string): string {
+  return `${SITE_URL}/share/${encodeURIComponent(tokenId)}`;
+}
+
 export function bugShareToXUrl(bug: ChillBug): string {
   return xIntentPostUrl({
     text: bugShareText(bug),
-    url: bug.openseaUrl,
+    url: bugSharePageUrl(bug.tokenId),
     hashtags: ["ChillBugs"],
   });
 }
