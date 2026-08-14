@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect } from "react";
 import type { ChillBug } from "@/lib/types";
 import { formatPercentile, tierLabel } from "@/lib/rarity";
+import { bugShareToXUrl } from "@/lib/share";
 
 type BugLightboxProps = {
   bug: ChillBug | null;
@@ -129,6 +130,15 @@ export function BugLightbox({ bug, onClose }: BugLightboxProps) {
               >
                 View on OpenSea
               </a>
+              <a
+                href={bugShareToXUrl(bug)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 border border-border-strong px-5 py-2.5 text-sm font-semibold tracking-[0.12em] text-fg uppercase transition hover:border-gilt hover:text-gilt"
+              >
+                <XLogo />
+                Share to X
+              </a>
               <button
                 type="button"
                 onClick={onClose}
@@ -141,5 +151,17 @@ export function BugLightbox({ bug, onClose }: BugLightboxProps) {
         </div>
       </div>
     </div>
+  );
+}
+
+function XLogo() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden
+      className="h-3.5 w-3.5 fill-current"
+    >
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.26 5.688L18.244 2.25Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z" />
+    </svg>
   );
 }
