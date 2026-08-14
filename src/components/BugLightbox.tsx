@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect } from "react";
 import type { ChillBug } from "@/lib/types";
 import { formatPercentile, tierLabel } from "@/lib/rarity";
-import { bugShareToXUrl } from "@/lib/share";
+import { ShareToXLink, XLogo } from "./ShareToX";
 
 type BugLightboxProps = {
   bug: ChillBug | null;
@@ -53,16 +53,13 @@ export function BugLightbox({ bug, onClose }: BugLightboxProps) {
           onClick={(event) => event.stopPropagation()}
         >
           <div className="absolute top-3 right-3 z-20 flex items-center gap-2">
-            <a
-              href={bugShareToXUrl(bug)}
-              target="_blank"
-              rel="noopener noreferrer"
+            <ShareToXLink
+              bug={bug}
               className="inline-flex h-10 items-center gap-2 border border-gilt bg-wall-deep/90 px-3 text-xs font-semibold tracking-[0.14em] text-gilt uppercase transition hover:bg-gilt hover:text-wall-deep"
-              aria-label="Share to X"
             >
               <XLogo />
               Share
-            </a>
+            </ShareToXLink>
             <button
               type="button"
               onClick={onClose}
@@ -116,15 +113,13 @@ export function BugLightbox({ bug, onClose }: BugLightboxProps) {
             </div>
 
             <div className="flex shrink-0 flex-wrap gap-3">
-              <a
-                href={bugShareToXUrl(bug)}
-                target="_blank"
-                rel="noopener noreferrer"
+              <ShareToXLink
+                bug={bug}
                 className="inline-flex items-center justify-center gap-2 bg-brass px-5 py-2.5 text-sm font-semibold tracking-[0.12em] text-wall-deep uppercase transition hover:bg-gilt"
               >
                 <XLogo />
                 Share to X
-              </a>
+              </ShareToXLink>
               <a
                 href={bug.openseaUrl}
                 target="_blank"
@@ -156,17 +151,5 @@ export function BugLightbox({ bug, onClose }: BugLightboxProps) {
         </div>
       </div>
     </div>
-  );
-}
-
-function XLogo() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      aria-hidden
-      className="h-3.5 w-3.5 fill-current"
-    >
-      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.26 5.688L18.244 2.25Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z" />
-    </svg>
   );
 }
