@@ -27,7 +27,7 @@ export function BugFrame({ bug, index, onSelect }: BugFrameProps) {
                 src={bug.imageUrl}
                 alt={bug.name}
                 fill
-                sizes="(max-width: 640px) 22vw, 11vw"
+                sizes="(max-width: 640px) 78vw, 26rem"
                 className="object-cover"
                 unoptimized
               />

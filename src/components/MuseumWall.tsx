@@ -1,8 +1,15 @@
 "use client";
 
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import {
+  useEffect,
+  useMemo,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
 import type { ChillBug } from "@/lib/types";
 import {
+  hangLayout,
   OPENSEA_COLLECTION_URL,
   WALL_COLUMNS,
   WALL_PAGE_SIZE,
@@ -39,9 +46,50 @@ function GalleryShell({ children }: { children: ReactNode }) {
   );
 }
 
+function HangGrid({
+  cols,
+  rows,
+  children,
+}: {
+  cols: number;
+  rows: number;
+  children: ReactNode;
+}) {
+  return (
+    <div className="hang-stage relative z-10 mx-auto w-full max-w-[86rem]">
+      <div
+        className="gallery-hang"
+        style={
+          {
+            "--hang-cols": cols,
+            "--hang-rows": rows,
+          } as CSSProperties
+        }
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function useMaxHangCols() {
+  const [maxCols, setMaxCols] = useState(WALL_COLUMNS);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    const apply = () => setMaxCols(mq.matches ? 4 : WALL_COLUMNS);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
+
+  return maxCols;
+}
+
 export function MuseumWall({ bugs, loading, error, address }: MuseumWallProps) {
   const [selected, setSelected] = useState<ChillBug | null>(null);
   const [page, setPage] = useState(0);
+  const maxCols = useMaxHangCols();
 
   const short = useMemo(
     () => `${address.slice(0, 6)}…${address.slice(-4)}`,
@@ -55,6 +103,11 @@ export function MuseumWall({ bugs, loading, error, address }: MuseumWallProps) {
     const start = safePage * WALL_PAGE_SIZE;
     return bugs.slice(start, start + WALL_PAGE_SIZE);
   }, [bugs, safePage]);
+
+  const layout = useMemo(
+    () => hangLayout(pageBugs.length || 1, maxCols),
+    [pageBugs.length, maxCols],
+  );
 
   useEffect(() => {
     setPage(0);
@@ -82,6 +135,7 @@ export function MuseumWall({ bugs, loading, error, address }: MuseumWallProps) {
   }, [bugs.length, pageCount, selected]);
 
   if (loading) {
+    const loadingLayout = hangLayout(4, maxCols);
     return (
       <GalleryShell>
         <div className="relative z-10 mt-6 mb-4 text-center sm:mt-8">
@@ -89,17 +143,15 @@ export function MuseumWall({ bugs, loading, error, address }: MuseumWallProps) {
             Curating your wing
           </p>
         </div>
-        <div className="hang-stage relative z-10 mx-auto w-full max-w-[86rem]">
-          <div className="gallery-hang">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="wood-frame animate-pulse">
-                <div className="wood-frame__mat">
-                  <div className="aspect-square bg-[#d8d0c4]" />
-                </div>
+        <HangGrid cols={loadingLayout.cols} rows={loadingLayout.rows}>
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="wood-frame animate-pulse">
+              <div className="wood-frame__mat">
+                <div className="aspect-square bg-[#d8d0c4]" />
               </div>
-            ))}
-          </div>
-        </div>
+            </div>
+          ))}
+        </HangGrid>
       </GalleryShell>
     );
   }
@@ -155,18 +207,16 @@ export function MuseumWall({ bugs, loading, error, address }: MuseumWallProps) {
         </p>
       </div>
 
-      <div className="hang-stage relative z-10 mx-auto w-full max-w-[86rem]">
-        <div key={safePage} className="gallery-hang">
-          {pageBugs.map((bug, index) => (
-            <BugFrame
-              key={bug.tokenId}
-              bug={bug}
-              index={index}
-              onSelect={setSelected}
-            />
-          ))}
-        </div>
-      </div>
+      <HangGrid cols={layout.cols} rows={layout.rows}>
+        {pageBugs.map((bug, index) => (
+          <BugFrame
+            key={bug.tokenId}
+            bug={bug}
+            index={index}
+            onSelect={setSelected}
+          />
+        ))}
+      </HangGrid>
 
       {pageCount > 1 ? (
         <nav

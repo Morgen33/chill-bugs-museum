@@ -501,9 +501,14 @@ body {
 }
 
 .gallery-hang {
-  --hang-cols: 4;
-  --hang-gap: clamp(10px, 1.5vw, 22px);
-  --cell: calc((100% - (var(--hang-cols) - 1) * var(--hang-gap)) / var(--hang-cols));
+  --hang-cols: 1;
+  --hang-rows: 1;
+  --hang-gap: clamp(14px, 1.8vw, 28px);
+  --max-frame: min(26rem, 52vmin);
+  --cell: min(
+    var(--max-frame),
+    calc((100% - (var(--hang-cols) - 1) * var(--hang-gap)) / var(--hang-cols))
+  );
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -537,21 +542,25 @@ body {
     height: auto;
     min-height: 220px;
   }
+
+  .gallery-hang {
+    --max-frame: min(20rem, 78vw);
+  }
 }
 
 @media (min-width: 640px) {
   .gallery-hang {
-    --hang-cols: 8;
     --cell: min(
-      calc((100cqw - 7 * var(--hang-gap)) / 8),
-      calc((100cqh - 3 * var(--hang-gap)) / 4)
+      var(--max-frame),
+      calc((100cqw - (var(--hang-cols) - 1) * var(--hang-gap)) / var(--hang-cols)),
+      calc((100cqh - (var(--hang-rows) - 1) * var(--hang-gap)) / var(--hang-rows))
     );
   }
 }
 
 .wood-frame {
   position: relative;
-  padding: 4px;
+  padding: clamp(5px, 1.4%, 9px);
   background: linear-gradient(
     145deg,
     #ead9b4 0%,
@@ -562,7 +571,7 @@ body {
   );
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.4),
-    0 8px 18px rgba(60, 45, 20, 0.16),
+    0 10px 24px rgba(60, 45, 20, 0.18),
     0 2px 4px rgba(0, 0, 0, 0.08);
 }
 
