@@ -43,8 +43,22 @@ export function BugLightbox({ bug, onClose }: BugLightboxProps) {
         onClick={onClose}
       />
 
-      <div className="relative z-10 flex min-h-[calc(100dvh-2rem)] items-center justify-center sm:min-h-[calc(100dvh-4rem)]">
-        <div className="grid w-full max-w-3xl max-h-[90dvh] overflow-hidden border border-border bg-wall shadow-[0_30px_80px_rgba(0,0,0,0.65)] md:grid-cols-[1.1fr_1fr] md:grid-rows-1">
+      <div
+        className="relative z-10 flex min-h-[calc(100dvh-2rem)] items-center justify-center sm:min-h-[calc(100dvh-4rem)]"
+        onClick={onClose}
+      >
+        <div
+          className="relative grid w-full max-w-3xl max-h-[90dvh] overflow-hidden border border-border bg-wall shadow-[0_30px_80px_rgba(0,0,0,0.65)] md:grid-cols-[1.1fr_1fr] md:grid-rows-1"
+          onClick={(event) => event.stopPropagation()}
+        >
+          <button
+            type="button"
+            onClick={onClose}
+            className="absolute top-3 right-3 z-20 flex h-10 w-10 items-center justify-center border border-border-strong bg-wall-deep/80 font-serif text-2xl leading-none text-gilt transition hover:border-gilt hover:text-gilt-bright"
+            aria-label="Close"
+          >
+            ×
+          </button>
           <div className="relative mx-auto aspect-square w-full max-w-md bg-wall-deep p-4 sm:p-5 md:max-w-none">
             <div className="ornate-frame frame-lightbox">
               <span aria-hidden className="frame-corner frame-corner--tl" />
