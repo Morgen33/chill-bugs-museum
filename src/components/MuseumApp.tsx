@@ -58,13 +58,15 @@ export function MuseumApp() {
             </span>
           </button>
           <nav className="flex items-center gap-5 text-[11px] font-semibold tracking-[0.18em] text-fg-muted uppercase sm:gap-7">
-            <button
-              type="button"
-              onClick={goHome}
-              className="transition hover:text-gilt"
-            >
-              Home
-            </button>
+            {inGallery ? (
+              <button
+                type="button"
+                onClick={goHome}
+                className="transition hover:text-gilt"
+              >
+                HOME
+              </button>
+            ) : null}
             <a
               href={OPENSEA_COLLECTION_URL}
               target="_blank"
