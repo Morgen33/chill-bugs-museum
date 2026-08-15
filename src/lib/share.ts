@@ -1,5 +1,4 @@
-import type { ChillBug } from "./types";
-import { formatPercentile, tierLabel } from "./rarity";
+import { SITE_URL } from "./constants";
 
 type XIntentParams = {
   text: string;
@@ -18,18 +17,22 @@ export function xIntentPostUrl({ text, url, hashtags }: XIntentParams): string {
   return `https://x.com/intent/post?${search.toString()}`;
 }
 
-export function bugShareText(bug: ChillBug): string {
-  const { tier, percentile, rarityAvailable } = bug.rarity;
-  const rarity = rarityAvailable
-    ? `${tierLabel(tier)} · ${formatPercentile(percentile)}`
-    : tierLabel(tier);
-  return `Just hung ${bug.name} in my Chill Bugs Museum — ${rarity}`;
+export function wallShareText(count: number): string {
+  if (count === 1) {
+    return "Just hung my Chill Bug on the museum wall";
+  }
+  return `Just hung ${count} Chill Bugs on my museum wall`;
 }
 
-export function bugShareToXUrl(bug: ChillBug): string {
+export function wallSharePageUrl(address: string, room: number): string {
+  const safeRoom = Math.max(1, Math.floor(room));
+  return `${SITE_URL}/share/wall/${address.toLowerCase()}/${safeRoom}`;
+}
+
+export function wallShareToXUrl(address: string, count: number, room: number): string {
   return xIntentPostUrl({
-    text: bugShareText(bug),
-    url: bug.openseaUrl,
+    text: wallShareText(count),
+    url: wallSharePageUrl(address, room),
     hashtags: ["ChillBugs"],
   });
 }

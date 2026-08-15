@@ -17,6 +17,7 @@ import {
 } from "@/lib/constants";
 import { BugFrame } from "./BugFrame";
 import { BugLightbox } from "./BugLightbox";
+import { ShareWallToX } from "./ShareToX";
 
 type MuseumWallProps = {
   bugs: ChillBug[];
@@ -260,6 +261,14 @@ export function MuseumWall({ bugs, loading, error, address }: MuseumWallProps) {
           />
         ))}
       </HangGrid>
+
+      <div className="relative z-10 mt-5 flex justify-center">
+        <ShareWallToX
+          address={address}
+          count={pageBugs.length}
+          room={safePage + 1}
+        />
+      </div>
 
       {pageCount > 1 ? (
         <nav
