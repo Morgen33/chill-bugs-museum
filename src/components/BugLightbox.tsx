@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useEffect } from "react";
 import type { ChillBug } from "@/lib/types";
 import { formatPercentile, tierLabel } from "@/lib/rarity";
-import { ShareToXLink, XLogo } from "./ShareToX";
 
 type BugLightboxProps = {
   bug: ChillBug | null;
@@ -52,23 +51,14 @@ export function BugLightbox({ bug, onClose }: BugLightboxProps) {
           className="relative grid w-full max-w-3xl max-h-[90dvh] overflow-y-auto border border-border bg-wall shadow-[0_30px_80px_rgba(0,0,0,0.65)] md:grid-cols-[1.1fr_1fr] md:grid-rows-1 md:overflow-hidden"
           onClick={(event) => event.stopPropagation()}
         >
-          <div className="absolute top-3 right-3 z-20 flex items-center gap-2">
-            <ShareToXLink
-              bug={bug}
-              className="inline-flex h-10 items-center gap-2 border border-gilt bg-wall-deep/90 px-3 text-xs font-semibold tracking-[0.14em] text-gilt uppercase transition hover:bg-gilt hover:text-wall-deep"
-            >
-              <XLogo />
-              Share
-            </ShareToXLink>
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex h-10 w-10 items-center justify-center border border-border-strong bg-wall-deep/80 font-serif text-2xl leading-none text-gilt transition hover:border-gilt hover:text-gilt-bright"
-              aria-label="Close"
-            >
-              ×
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="absolute top-3 right-3 z-20 flex h-10 w-10 items-center justify-center border border-border-strong bg-wall-deep/80 font-serif text-2xl leading-none text-gilt transition hover:border-gilt hover:text-gilt-bright"
+            aria-label="Close"
+          >
+            ×
+          </button>
           <div className="relative mx-auto aspect-square w-full max-w-md bg-wall-deep p-4 sm:p-5 md:max-w-none">
             <div className="ornate-frame frame-lightbox">
               <span aria-hidden className="frame-corner frame-corner--tl" />
@@ -93,8 +83,8 @@ export function BugLightbox({ bug, onClose }: BugLightboxProps) {
             </div>
           </div>
 
-          <div className="flex min-h-0 flex-col gap-5 overflow-y-auto p-6 sm:p-8 md:pt-16">
-            <div className="md:pr-28">
+          <div className="flex min-h-0 flex-col gap-5 overflow-y-auto p-6 sm:p-8">
+            <div>
               <p className="font-serif text-sm tracking-[0.22em] text-gilt uppercase">
                 {tierLabel(tier)}
                 {rarityAvailable ? ` · ${formatPercentile(percentile)}` : ""}
@@ -113,18 +103,11 @@ export function BugLightbox({ bug, onClose }: BugLightboxProps) {
             </div>
 
             <div className="flex shrink-0 flex-wrap gap-3">
-              <ShareToXLink
-                bug={bug}
-                className="inline-flex items-center justify-center gap-2 bg-brass px-5 py-2.5 text-sm font-semibold tracking-[0.12em] text-wall-deep uppercase transition hover:bg-gilt"
-              >
-                <XLogo />
-                Share to X
-              </ShareToXLink>
               <a
                 href={bug.openseaUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center justify-center border border-border-strong px-5 py-2.5 text-sm font-semibold tracking-[0.12em] text-fg uppercase transition hover:border-gilt hover:text-gilt"
+                className="inline-flex items-center justify-center bg-brass px-5 py-2.5 text-sm font-semibold tracking-[0.12em] text-wall-deep uppercase transition hover:bg-gilt"
               >
                 View on OpenSea
               </a>

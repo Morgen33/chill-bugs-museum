@@ -1,6 +1,4 @@
-import type { ReactNode } from "react";
-import type { ChillBug } from "@/lib/types";
-import { bugShareToXUrl } from "@/lib/share";
+import { wallShareToXUrl } from "@/lib/share";
 
 export function XLogo({ className = "h-3.5 w-3.5 fill-current" }: { className?: string }) {
   return (
@@ -10,22 +8,23 @@ export function XLogo({ className = "h-3.5 w-3.5 fill-current" }: { className?: 
   );
 }
 
-type ShareToXLinkProps = {
-  bug: ChillBug;
-  className: string;
-  children: ReactNode;
+type ShareWallToXProps = {
+  address: string;
+  count: number;
+  room: number;
 };
 
-export function ShareToXLink({ bug, className, children }: ShareToXLinkProps) {
+export function ShareWallToX({ address, count, room }: ShareWallToXProps) {
   return (
     <a
-      href={bugShareToXUrl(bug)}
+      href={wallShareToXUrl(address, count, room)}
       target="_blank"
       rel="noopener noreferrer"
-      className={className}
-      aria-label={`Share ${bug.name} to X`}
+      className="relative z-10 inline-flex items-center justify-center gap-2 bg-brass px-5 py-2.5 text-sm font-semibold tracking-[0.14em] text-wall-deep uppercase transition hover:bg-gilt"
+      aria-label="Share wall to X"
     >
-      {children}
+      <XLogo />
+      SHARE TO X
     </a>
   );
 }
