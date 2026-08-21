@@ -26,7 +26,8 @@ export function wallShareText(count: number): string {
 
 export function wallSharePageUrl(address: string, room: number): string {
   const safeRoom = Math.max(1, Math.floor(room));
-  return `${SITE_URL}/share/wall/${address.toLowerCase()}/${safeRoom}`;
+  // Query bump so X recrawls instead of reusing the old empty-frame card.
+  return `${SITE_URL}/share/wall/${address.toLowerCase()}/${safeRoom}?n=2`;
 }
 
 export function wallShareToXUrl(address: string, count: number, room: number): string {
