@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import {
   WALL_SHARE_IMAGE_NAME,
   wallShareOgImageUrl,
-  wallShareText,
   wallShareToXUrl,
 } from "@/lib/share";
 
@@ -49,61 +48,13 @@ function downloadPng(blob: Blob): void {
   window.setTimeout(() => URL.revokeObjectURL(href), 1000);
 }
 
-async function copyPng(blob: Blob): Promise<boolean> {
-  if (!navigator.clipboard?.write || typeof ClipboardItem === "undefined") {
-    return false;
-  }
-  try {
-    await navigator.clipboard.write([
-      new ClipboardItem({
-        "image/png": blob,
-      }),
-    ]);
-    return true;
-  } catch {
-    try {
-      await navigator.clipboard.write([
-        new ClipboardItem({
-          "image/png": Promise.resolve(blob),
-        }),
-      ]);
-      return true;
-    } catch {
-      return false;
-    }
-  }
-}
-
-function canShareFiles(file: File): boolean {
-  return typeof navigator.canShare === "function" && navigator.canShare({ files: [file] });
-}
-
-async function sharePngNative(file: File, text: string): Promise<boolean> {
-  if (!canShareFiles(file) || typeof navigator.share !== "function") {
-    return false;
-  }
-  try {
-    await navigator.share({ files: [file], text, title: "Chill Bugs Museum" });
-    return true;
-  } catch (error) {
-    return error instanceof Error && error.name === "AbortError";
-  }
-}
-
-function openComposer(
-  href: string,
-  popup: Window | null,
-): void {
-  if (popup && !popup.closed) {
-    popup.location.href = href;
-    return;
-  }
-  window.open(href, "_blank", "noopener,noreferrer");
+function isShareAbort(error: unknown): boolean {
+  return error instanceof Error && error.name === "AbortError";
 }
 
 export function ShareWallToX({ address, count, room }: ShareWallToXProps) {
   const [busy, setBusy] = useState(false);
-  const [hint, setHint] = useState<string | null>(null);
+  const [toast, setToast] = useState<string | null>(null);
   const [prepared, setPrepared] = useState<{ key: string; blob: Blob } | null>(
     null,
   );
@@ -126,55 +77,41 @@ export function ShareWallToX({ address, count, room }: ShareWallToXProps) {
     };
   }, [address, room]);
 
-  async function handOffPicture(blob: Blob): Promise<void> {
-    const copied = await copyPng(blob);
-    downloadPng(blob);
-    setHint(
-      copied
-        ? "Paste the picture into the post (Ctrl+V / ⌘V), or attach the file that downloaded."
-        : "Attach the wall picture that just downloaded to your post.",
-    );
-  }
+  useEffect(() => {
+    if (!toast) return;
+    const timer = window.setTimeout(() => setToast(null), 3500);
+    return () => window.clearTimeout(timer);
+  }, [toast]);
 
   async function share() {
     if (busy) return;
     setBusy(true);
-    setHint(null);
 
     const href = wallShareToXUrl(address, count, room);
-    const caption = `${wallShareText(count)} #ChillBugs`;
-    const readyFile = readyBlob ? pngFile(readyBlob) : null;
-    const nativeReady = readyFile ? canShareFiles(readyFile) : false;
-    const popup = nativeReady ? null : window.open("about:blank", "_blank");
+    let blob: Blob | null = readyBlob;
 
     try {
-      if (readyBlob && readyFile && nativeReady) {
-        if (await sharePngNative(readyFile, caption)) {
-          setBusy(false);
-          return;
-        }
-      }
-
-      if (readyBlob) {
-        openComposer(href, popup);
-        await handOffPicture(readyBlob);
-        setBusy(false);
-        return;
-      }
-
-      const blob = await fetchWallPng(wallShareOgImageUrl(address, room));
+      blob = readyBlob ?? (await fetchWallPng(wallShareOgImageUrl(address, room)));
       setPrepared({ key: wallKey, blob });
       const file = pngFile(blob);
-      if (await sharePngNative(file, caption)) {
-        popup?.close();
-        setBusy(false);
-        return;
+      const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
+
+      if (isMobile && navigator.canShare?.({ files: [file] })) {
+        await navigator.share({ files: [file] });
+      } else {
+        window.open(href, "_blank", "noopener,noreferrer");
+        await navigator.clipboard.write([
+          new ClipboardItem({ "image/png": blob }),
+        ]);
+        downloadPng(blob);
+        setToast("Pasted to clipboard");
       }
-      openComposer(href, popup);
-      await handOffPicture(blob);
-    } catch {
-      openComposer(href, popup);
-      setHint("Could not prepare the picture. Try again in a moment.");
+    } catch (error) {
+      if (!isShareAbort(error)) {
+        if (blob) downloadPng(blob);
+        setToast("Could not copy the picture — attach the downloaded file");
+        window.open(href, "_blank", "noopener,noreferrer");
+      }
     }
 
     setBusy(false);
@@ -194,15 +131,14 @@ export function ShareWallToX({ address, count, room }: ShareWallToXProps) {
         <XLogo />
         {busy ? "PREPARING…" : "SHARE TO X"}
       </button>
-      {hint ? (
-        <p className="max-w-md text-center text-xs tracking-[0.12em] text-gilt uppercase">
-          {hint}
+      {toast ? (
+        <p
+          role="status"
+          className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 bg-brass px-4 py-2 text-xs font-semibold tracking-[0.14em] text-wall-deep uppercase shadow-lg"
+        >
+          {toast}
         </p>
-      ) : (
-        <p className="max-w-md text-center text-xs tracking-[0.12em] text-fg-muted uppercase">
-          X will not attach the picture by itself — this copies it for you to paste
-        </p>
-      )}
+      ) : null}
     </div>
   );
 }
