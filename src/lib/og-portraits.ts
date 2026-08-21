@@ -46,10 +46,11 @@ async function mapPool<T, R>(
 
 async function portraitDataUri(url: string, px: number): Promise<string | null> {
   try {
-    const res = await fetch(thumbUrl(url, Math.max(px * 2, 128)), {
+    const res = await fetch(thumbUrl(url, Math.max(px, 96)), {
       headers: FETCH_HEADERS,
       redirect: "follow",
-      signal: AbortSignal.timeout(8000),
+      signal: AbortSignal.timeout(6000),
+      next: { revalidate: 86400 },
     });
     if (!res.ok) return null;
 
@@ -59,7 +60,7 @@ async function portraitDataUri(url: string, px: number): Promise<string | null> 
     const jpeg = await sharp(input)
       .rotate()
       .resize(px, px, { fit: "cover", position: "centre" })
-      .jpeg({ quality: 82 })
+      .jpeg({ quality: 76 })
       .toBuffer();
 
     return `data:image/jpeg;base64,${jpeg.toString("base64")}`;
@@ -72,7 +73,7 @@ export async function loadPortraitDataUris(
   urls: string[],
   px: number,
 ): Promise<(string | null)[]> {
-  return mapPool(urls, 8, async (url) => {
+  return mapPool(urls, 16, async (url) => {
     if (!url) return null;
     return portraitDataUri(url, px);
   });

@@ -5,6 +5,20 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: process.cwd(),
   },
+  async redirects() {
+    return [
+      {
+        source: "/share/wall/:address/:room",
+        destination: "/share/hang/:address/:room",
+        permanent: true,
+      },
+      {
+        source: "/share/wall/:address/:room/opengraph-image",
+        destination: "/share/hang/:address/:room/card.png",
+        permanent: true,
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "i.seadn.io", pathname: "/**" },

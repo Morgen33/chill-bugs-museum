@@ -1,48 +1,9 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import { hangLayout } from "@/lib/constants";
-import { loadWallShare, parseWallRoom } from "@/lib/wall-share";
-import { wallShareText } from "@/lib/share";
+import type { WallShareData } from "@/lib/wall-share";
 
-type WallSharePageProps = {
-  params: Promise<{ address: string; room: string }>;
-};
-
-export async function generateMetadata({
-  params,
-}: WallSharePageProps): Promise<Metadata> {
-  const { address, room: roomParam } = await params;
-  const room = parseWallRoom(roomParam);
-  const wall = room ? await loadWallShare(address, room) : null;
-  if (!wall) {
-    return { title: "Chill Bugs Museum" };
-  }
-
-  const description = wallShareText(wall.bugs.length);
-  return {
-    title: `Museum wall · Chill Bugs Museum`,
-    description,
-    openGraph: {
-      title: "Chill Bugs Museum",
-      description,
-      type: "website",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: "Chill Bugs Museum",
-      description,
-    },
-  };
-}
-
-export default async function WallSharePage({ params }: WallSharePageProps) {
-  const { address, room: roomParam } = await params;
-  const room = parseWallRoom(roomParam);
-  const wall = room ? await loadWallShare(address, room) : null;
-  if (!wall) notFound();
-
+export function WallShareView({ wall }: { wall: WallShareData }) {
   const layout = hangLayout(wall.bugs.length);
   const cellRem =
     wall.bugs.length === 1

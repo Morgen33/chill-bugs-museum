@@ -3,18 +3,13 @@ import { hangLayout } from "@/lib/constants";
 import { loadPortraitDataUris } from "@/lib/og-portraits";
 import { loadWallShare, parseWallRoom } from "@/lib/wall-share";
 
-export const runtime = "nodejs";
-export const maxDuration = 60;
-export const revalidate = 60;
-export const alt = "Chill Bugs museum wall";
 export const size = { width: 1200, height: 630 };
-export const contentType = "image/png";
 
 type OgImageProps = {
   params: Promise<{ address: string; room: string }>;
 };
 
-export default async function Image({ params }: OgImageProps) {
+export async function renderWallOgImage({ params }: OgImageProps) {
   const { address, room: roomParam } = await params;
   const room = parseWallRoom(roomParam);
   const wall = room ? await loadWallShare(address, room) : null;
@@ -150,6 +145,13 @@ export default async function Image({ params }: OgImageProps) {
         </div>
       </div>
     ),
-    { ...size },
+    {
+      ...size,
+      headers: {
+        "Cache-Control":
+          "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800",
+        "Access-Control-Allow-Origin": "*",
+      },
+    },
   );
 }
