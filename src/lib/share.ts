@@ -37,6 +37,8 @@ export function wallShareOgImageUrl(address: string, room: number): string {
   return `${SITE_URL}${wallSharePath(address, room)}/card.png`;
 }
 
+export const WALL_SHARE_IMAGE_NAME = "chill-bugs-wall.png";
+
 export function wallShareToXUrl(address: string, count: number, room: number): string {
   return xIntentPostUrl({
     text: wallShareText(count),
