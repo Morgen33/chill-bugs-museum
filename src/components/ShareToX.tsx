@@ -1,4 +1,7 @@
-import { wallShareToXUrl } from "@/lib/share";
+"use client";
+
+import { useState } from "react";
+import { wallShareOgImageUrl, wallShareToXUrl } from "@/lib/share";
 
 export function XLogo({ className = "h-3.5 w-3.5 fill-current" }: { className?: string }) {
   return (
@@ -14,17 +17,49 @@ type ShareWallToXProps = {
   room: number;
 };
 
+async function warmOgImage(url: string): Promise<void> {
+  await Promise.race([
+    fetch(url).then(async (res) => {
+      if (!res.ok) throw new Error("og image failed");
+      await res.arrayBuffer();
+    }),
+    new Promise<void>((resolve) => {
+      window.setTimeout(resolve, 20000);
+    }),
+  ]);
+}
+
 export function ShareWallToX({ address, count, room }: ShareWallToXProps) {
+  const [busy, setBusy] = useState(false);
+
+  async function share() {
+    if (busy) return;
+    setBusy(true);
+    try {
+      await warmOgImage(wallShareOgImageUrl(address, room));
+    } catch {
+      // Still open the composer; X may pick up the card on a later crawl.
+    }
+    window.open(
+      wallShareToXUrl(address, count, room),
+      "_blank",
+      "noopener,noreferrer",
+    );
+    setBusy(false);
+  }
+
   return (
-    <a
-      href={wallShareToXUrl(address, count, room)}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="relative z-10 inline-flex items-center justify-center gap-2 bg-brass px-5 py-2.5 text-sm font-semibold tracking-[0.14em] text-wall-deep uppercase transition hover:bg-gilt"
+    <button
+      type="button"
+      onClick={() => {
+        void share();
+      }}
+      disabled={busy}
+      className="relative z-10 inline-flex items-center justify-center gap-2 bg-brass px-5 py-2.5 text-sm font-semibold tracking-[0.14em] text-wall-deep uppercase transition hover:bg-gilt disabled:cursor-wait disabled:opacity-80"
       aria-label="Share wall to X"
     >
       <XLogo />
-      SHARE TO X
-    </a>
+      {busy ? "PREPARING…" : "SHARE TO X"}
+    </button>
   );
 }

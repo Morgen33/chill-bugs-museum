@@ -24,10 +24,17 @@ export function wallShareText(count: number): string {
   return `Just hung ${count} Chill Bugs on my museum wall`;
 }
 
-export function wallSharePageUrl(address: string, room: number): string {
+function wallSharePath(address: string, room: number): string {
   const safeRoom = Math.max(1, Math.floor(room));
-  // Query bump so X recrawls instead of reusing the old empty-frame card.
-  return `${SITE_URL}/share/wall/${address.toLowerCase()}/${safeRoom}?n=2`;
+  return `/share/hang/${address.toLowerCase()}/${safeRoom}`;
+}
+
+export function wallSharePageUrl(address: string, room: number): string {
+  return `${SITE_URL}${wallSharePath(address, room)}`;
+}
+
+export function wallShareOgImageUrl(address: string, room: number): string {
+  return `${SITE_URL}${wallSharePath(address, room)}/card.png`;
 }
 
 export function wallShareToXUrl(address: string, count: number, room: number): string {
