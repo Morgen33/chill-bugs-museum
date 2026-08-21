@@ -17,7 +17,6 @@ import {
 } from "@/lib/constants";
 import { BugFrame } from "./BugFrame";
 import { BugLightbox } from "./BugLightbox";
-import { ShareWallToX } from "./ShareToX";
 
 type MuseumWallProps = {
   bugs: ChillBug[];
@@ -28,18 +27,31 @@ type MuseumWallProps = {
 
 function TrackRail() {
   return (
-    <>
-      <div className="gallery-track mt-3 sm:mt-5" aria-hidden>
+    <div className="gallery-lighting mt-3 sm:mt-5" aria-hidden>
+      <div className="gallery-washes">
         {Array.from({ length: WALL_COLUMNS }).map((_, i) => (
-          <span key={i} className="gallery-track__spot" />
+          <span key={i} className="gallery-wash">
+            <span className="gallery-wash__beams">
+              <span className="gallery-wash__beam" />
+              <span className="gallery-wash__core" />
+            </span>
+            <span className="gallery-wash__pool" />
+          </span>
         ))}
       </div>
-      <div className="gallery-beams" aria-hidden>
-        {Array.from({ length: WALL_COLUMNS }).map((_, i) => (
-          <span key={i} className="gallery-beam" />
-        ))}
+      <div className="gallery-hardware">
+        <div className="gallery-track" />
+        <div className="gallery-fixtures">
+          {Array.from({ length: WALL_COLUMNS }).map((_, i) => (
+            <span key={i} className="gallery-fixture">
+              <span className="gallery-fixture__clip" />
+              <span className="gallery-fixture__can" />
+              <span className="gallery-fixture__glow" />
+            </span>
+          ))}
+        </div>
       </div>
-    </>
+    </div>
   );
 }
 
@@ -102,7 +114,7 @@ function HangGrid({
   return (
     <div
       ref={stageRef}
-      className="hang-stage relative z-10 mx-auto w-full max-w-[86rem]"
+      className="hang-stage relative mx-auto w-full max-w-[86rem]"
     >
       <div
         className="gallery-hang"
@@ -175,7 +187,7 @@ export function MuseumWall({ bugs, loading, error, address }: MuseumWallProps) {
     const loadingLayout = hangLayout(4, maxCols);
     return (
       <GalleryShell>
-        <div className="relative z-10 mt-6 mb-4 text-center sm:mt-8">
+        <div className="relative mt-6 mb-4 text-center sm:mt-8">
           <p className="font-serif text-sm tracking-[0.28em] text-gilt uppercase">
             Curating your wing
           </p>
@@ -249,17 +261,9 @@ export function MuseumWall({ bugs, loading, error, address }: MuseumWallProps) {
         ))}
       </HangGrid>
 
-      <div className="relative z-10 mt-5 flex justify-center">
-        <ShareWallToX
-          address={address}
-          count={pageBugs.length}
-          room={safePage + 1}
-        />
-      </div>
-
       {pageCount > 1 ? (
         <nav
-          className="relative z-10 mt-5 flex items-center justify-center gap-4 sm:gap-6"
+          className="relative mt-5 flex items-center justify-center gap-4 sm:gap-6"
           aria-label="Gallery pages"
         >
           <button

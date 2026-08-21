@@ -424,7 +424,9 @@ body {
   position: relative;
   overflow: hidden;
   background-color: #d9d2c6;
-  background-image: linear-gradient(180deg, #e4ddd2 0%, #d9d2c6 42%, #d0c8ba 100%);
+  background-image:
+    linear-gradient(180deg, rgba(40, 32, 22, 0.1) 0%, transparent 52px),
+    linear-gradient(180deg, #e4ddd2 0%, #d9d2c6 42%, #d0c8ba 100%);
 }
 
 .gallery-baseboard {
@@ -459,55 +461,283 @@ body {
   box-shadow: inset 0 18px 28px rgba(70, 50, 20, 0.12);
 }
 
+.gallery-lighting {
+  position: relative;
+  flex-shrink: 0;
+  width: min(100%, 86rem);
+  height: 4.6rem;
+  margin: 0 auto;
+  padding: 0 3.5%;
+  overflow: visible;
+}
+
+.gallery-washes {
+  position: absolute;
+  top: 3.35rem;
+  right: 3.5%;
+  left: 3.5%;
+  z-index: 0;
+  display: flex;
+  justify-content: space-between;
+  height: min(68vh, 560px);
+  pointer-events: none;
+}
+
+.gallery-wash {
+  position: relative;
+  width: 32px;
+  height: 100%;
+  flex-shrink: 0;
+}
+
+.gallery-wash__beams {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: min(28vw, 280px);
+  height: 100%;
+  overflow: visible;
+  transform: translateX(-50%);
+  filter: blur(20px);
+  pointer-events: none;
+}
+
+.gallery-wash__beam,
+.gallery-wash__core,
+.gallery-wash__pool {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.gallery-wash__beam {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: none;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 236, 170, 0.78) 0%,
+    rgba(255, 244, 210, 0.32) 14%,
+    rgba(255, 248, 225, 0.12) 42%,
+    rgba(255, 252, 240, 0.04) 70%,
+    transparent 100%
+  );
+  clip-path: polygon(46% 0, 54% 0, 100% 100%, 0 100%);
+}
+
+.gallery-wash__core {
+  top: 0;
+  left: 50%;
+  width: 46%;
+  height: 48%;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 244, 200, 0.9) 0%,
+    rgba(255, 236, 180, 0.32) 24%,
+    transparent 80%
+  );
+  clip-path: polygon(38% 0, 62% 0, 100% 100%, 0 100%);
+}
+
+.gallery-wash__pool {
+  top: 12%;
+  width: min(28vw, 260px);
+  height: 68%;
+  background: radial-gradient(
+    ellipse 46% 38% at 50% 18%,
+    rgba(255, 252, 238, 0.72) 0%,
+    rgba(255, 236, 190, 0.22) 38%,
+    transparent 68%
+  );
+  filter: blur(18px);
+}
+
+.gallery-hardware {
+  position: relative;
+  z-index: 3;
+  height: 100%;
+}
+
 .gallery-track {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 10px;
+  border-radius: 1px;
+  background: linear-gradient(
+    180deg,
+    #525252 0%,
+    #2a2a2a 14%,
+    #0c0c0c 40%,
+    #161616 76%,
+    #323232 100%
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.24),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.9),
+    0 1px 0 rgba(255, 255, 255, 0.08),
+    0 3px 0 rgba(0, 0, 0, 0.18),
+    0 8px 18px rgba(0, 0, 0, 0.28);
+}
+
+.gallery-track::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  right: 8px;
+  left: 8px;
+  height: 3px;
+  background: #000;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.gallery-track::after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  right: 0;
+  left: 0;
+  height: 12px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.28), transparent);
+  pointer-events: none;
+}
+
+.gallery-fixtures {
   position: relative;
   z-index: 3;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  width: min(100%, 86rem);
-  margin: 0 auto;
-  height: 10px;
-  padding: 0 3.5%;
-  background: #141414;
-  border-radius: 1px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+  height: 100%;
 }
 
-.gallery-track__spot {
+.gallery-fixture {
   position: relative;
+  width: 32px;
+  height: 64px;
+  flex-shrink: 0;
+}
+
+.gallery-fixture::before {
+  content: "";
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  z-index: 1;
+  width: 26px;
+  height: 18px;
+  transform: translateX(-50%);
+  border: 2px solid #1a1a1a;
+  border-bottom: 0;
+  border-radius: 4px 4px 0 0;
+  background: transparent;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.gallery-fixture__clip {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 2;
   width: 14px;
   height: 10px;
-  flex-shrink: 0;
-  background:
-    radial-gradient(circle at 50% 110%, #ffe9a8 0%, #c9a45a 38%, #111 72%);
-  border-radius: 0 0 4px 4px;
-  box-shadow: 0 8px 18px rgba(255, 214, 130, 0.55);
+  transform: translateX(-50%);
+  border-radius: 1px;
+  background: linear-gradient(90deg, #050505, #2e2e2e 45%, #0c0c0c);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 1px 1px rgba(0, 0, 0, 0.5);
 }
 
-.gallery-beams {
+.gallery-fixture__clip::after {
+  content: "";
   position: absolute;
-  inset: 0;
-  z-index: 1;
-  display: flex;
-  justify-content: space-between;
-  padding: 18px 5% 0;
-  pointer-events: none;
+  top: 9px;
+  left: 50%;
+  width: 3px;
+  height: 16px;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, #050505, #3a3a3a 40%, #111);
+  box-shadow: 1px 0 0 rgba(255, 255, 255, 0.1);
 }
 
-.gallery-beam {
-  width: 11%;
-  height: 68%;
+.gallery-fixture__clip::before {
+  content: "";
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  z-index: 3;
+  width: 9px;
+  height: 9px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 28%, #7a7a7a, #222 58%, #050505);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.32),
+    0 1px 2px rgba(0, 0, 0, 0.55);
+}
+
+.gallery-fixture__can {
+  position: absolute;
+  top: 26px;
+  left: 50%;
+  z-index: 2;
+  width: 22px;
+  height: 32px;
+  transform: translateX(-50%) perspective(56px) rotateX(16deg);
+  transform-origin: top center;
+  border-radius: 3px 3px 9px 9px;
   background: linear-gradient(
-    180deg,
-    rgba(255, 236, 190, 0.7) 0%,
-    rgba(255, 244, 214, 0.28) 38%,
-    rgba(255, 248, 230, 0.08) 62%,
-    transparent 82%
+    90deg,
+    #050505 0%,
+    #3a3a3a 20%,
+    #161616 48%,
+    #454545 72%,
+    #0a0a0a 100%
   );
-  clip-path: polygon(40% 0, 60% 0, 100% 100%, 0 100%);
-  filter: blur(10px);
-  mix-blend-mode: soft-light;
+  box-shadow:
+    1px 5px 7px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -4px 0 1px #0a0a0a,
+    inset 0 -12px 12px rgba(255, 210, 120, 0.28);
+}
+
+.gallery-fixture__can::before {
+  content: "";
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  width: 16px;
+  height: 7px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 35%, #fffef6 0%, #ffe08a 50%, #b56c10 100%);
+  box-shadow:
+    0 0 0 1.5px #141414,
+    0 0 3px 1px rgba(255, 248, 220, 0.85);
+}
+
+.gallery-fixture__glow {
+  position: absolute;
+  top: 46px;
+  left: 50%;
+  z-index: 1;
+  width: 78px;
+  height: 100px;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    rgba(255, 244, 200, 0.95) 0%,
+    rgba(255, 214, 120, 0.42) 28%,
+    transparent 66%
+  );
+  filter: blur(8px);
+  pointer-events: none;
 }
 
 .gallery-hang {
@@ -528,7 +758,6 @@ body {
 
 .hang-stage {
   position: relative;
-  z-index: 2;
   display: flex;
   flex: 1;
   align-items: center;
@@ -551,7 +780,8 @@ body {
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.4),
     0 10px 24px rgba(60, 45, 20, 0.18),
-    0 2px 4px rgba(0, 0, 0, 0.08);
+    0 2px 4px rgba(0, 0, 0, 0.08),
+    0 -16px 36px rgba(255, 232, 180, 0.2);
 }
 
 .wood-frame__mat {
