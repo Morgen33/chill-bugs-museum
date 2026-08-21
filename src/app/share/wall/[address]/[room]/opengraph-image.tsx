@@ -1,9 +1,11 @@
 import { ImageResponse } from "next/og";
 import { hangLayout } from "@/lib/constants";
+import { loadPortraitDataUris } from "@/lib/og-portraits";
 import { loadWallShare, parseWallRoom } from "@/lib/wall-share";
 
 export const runtime = "nodejs";
-export const revalidate = 300;
+export const maxDuration = 60;
+export const revalidate = 60;
 export const alt = "Chill Bugs museum wall";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -36,6 +38,10 @@ export default async function Image({ params }: OgImageProps) {
   const framePad = Math.max(4, Math.round(cell * 0.06));
   const matPad = Math.max(6, Math.round(cell * 0.1));
   const picture = Math.max(24, cell - framePad * 2 - matPad * 2);
+  const portraits = await loadPortraitDataUris(
+    bugs.map((bug) => bug.imageUrl),
+    picture,
+  );
   const label =
     bugs.length === 1
       ? "1 Chill Bug on the wall"
@@ -95,7 +101,7 @@ export default async function Image({ params }: OgImageProps) {
               justifyContent: "center",
             }}
           >
-            {bugs.map((bug) => (
+            {bugs.map((bug, index) => (
               <div
                 key={bug.tokenId}
                 style={{
@@ -115,9 +121,9 @@ export default async function Image({ params }: OgImageProps) {
                     background: "#f3eee6",
                   }}
                 >
-                  {bug.imageUrl ? (
+                  {portraits[index] ? (
                     <img
-                      src={bug.imageUrl}
+                      src={portraits[index]!}
                       alt=""
                       width={picture}
                       height={picture}
