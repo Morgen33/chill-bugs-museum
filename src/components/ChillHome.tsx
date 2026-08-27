@@ -66,32 +66,32 @@ export function ChillHome() {
       <HomeHeader />
 
       <div className="relative">
-        <section className="md:hidden">
+        <section className="lg:hidden">
           <Image
             src="/home-hero.jpg"
             alt="Chill Bugs on a sunset road trip"
             width={1024}
-            height={334}
+            height={576}
             priority
             className="h-auto w-full"
           />
           <HeroCopy className="px-5 py-8" />
         </section>
 
-        <section className="relative isolate hidden min-h-[420px] overflow-hidden md:block lg:min-h-[520px]">
+        <section className="relative isolate hidden min-h-[420px] overflow-hidden lg:block lg:min-h-[520px]">
           <Image
             src="/home-hero.jpg"
             alt=""
             fill
             priority
             sizes="100vw"
-            className="object-cover object-[center_42%]"
+            className="object-cover object-[70%_50%]"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black from-5% via-black/80 via-35% to-transparent to-70%" />
           <HeroCopy className="relative z-10 flex min-h-[420px] max-w-xl flex-col justify-center px-10 lg:min-h-[520px] lg:pb-36" />
         </section>
 
-        <section className="relative z-20 mx-auto grid max-w-[92rem] grid-cols-1 gap-4 px-4 py-6 sm:grid-cols-2 sm:px-6 md:-mt-24 lg:grid-cols-4 lg:px-8">
+        <section className="relative z-20 mx-auto grid max-w-[92rem] grid-cols-1 gap-4 px-4 py-6 sm:grid-cols-2 sm:px-6 lg:-mt-24 lg:grid-cols-4 lg:px-8">
           {CARDS.map((card) => (
             <article
               key={card.title}

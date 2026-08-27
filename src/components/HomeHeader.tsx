@@ -39,7 +39,7 @@ export function HomeHeader() {
 
   return (
     <header className="relative z-40 bg-black px-4 py-3 sm:px-8">
-      <div className="flex items-center justify-between gap-4 md:grid md:grid-cols-[auto_1fr_auto] md:items-center">
+      <div className="flex items-center justify-between gap-4 lg:grid lg:grid-cols-[auto_1fr_auto] lg:items-center">
         <Link href="/home" className="shrink-0" onClick={close}>
           <Image
             src="/logo.png"
@@ -47,21 +47,21 @@ export function HomeHeader() {
             width={160}
             height={160}
             priority
-            className="h-20 w-20 object-contain md:h-40 md:w-40"
+            className="h-20 w-20 object-contain lg:h-40 lg:w-40"
           />
         </Link>
 
-        <nav className="hidden items-center justify-center gap-8 text-base font-medium text-white md:flex">
+        <nav className="hidden items-center justify-center gap-8 text-base font-medium text-white lg:flex">
           {NAV.map((item) => (
             <NavLink key={item.label} item={item} />
           ))}
         </nav>
 
-        <SocialIcons className="hidden justify-end md:flex" />
+        <SocialIcons className="hidden justify-end lg:flex" />
 
         <button
           type="button"
-          className="inline-flex h-11 w-11 items-center justify-center rounded-md border border-white/25 text-white md:hidden"
+          className="inline-flex h-12 w-12 items-center justify-center rounded-md border border-white/25 text-white lg:hidden"
           aria-expanded={open}
           aria-controls={menuId}
           aria-label={open ? "Close menu" : "Open menu"}
@@ -74,7 +74,7 @@ export function HomeHeader() {
       {open ? (
         <div
           id={menuId}
-          className="mt-4 border-t border-white/15 pt-4 pb-2 md:hidden"
+          className="mt-4 border-t border-white/15 pt-4 pb-2 lg:hidden"
         >
           <nav className="flex flex-col gap-1">
             {NAV.map((item) => (
