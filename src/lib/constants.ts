@@ -11,6 +11,8 @@ export const TWITTER_URL = "https://x.com/TheChillBugs";
 
 export const DISCORD_URL = "https://discord.gg/3S27nh49Hm";
 
+export const GO_CHILL_URL = "https://chillbugs.xyz";
+
 export const SOCIAL_LINKS = [
   { name: "Twitter", href: TWITTER_URL, icon: "twitter" },
   { name: "OpenSea", href: OPENSEA_COLLECTION_URL, icon: "opensea" },

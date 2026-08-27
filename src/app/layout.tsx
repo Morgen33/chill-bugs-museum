@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Figtree } from "next/font/google";
+import { Bangers, Cormorant_Garamond, Figtree } from "next/font/google";
 import { WalletProvider } from "@/components/WalletProvider";
 import { SITE_URL } from "@/lib/constants";
 import "./globals.css";
@@ -13,7 +13,14 @@ const cormorant = Cormorant_Garamond({
 const figtree = Figtree({
   variable: "--font-figtree",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800"],
+  style: ["normal", "italic"],
+});
+
+const bangers = Bangers({
+  variable: "--font-bangers",
+  subsets: ["latin"],
+  weight: "400",
 });
 
 export const metadata: Metadata = {
@@ -27,7 +34,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${cormorant.variable} ${figtree.variable} h-full antialiased`}
+      className={`${cormorant.variable} ${figtree.variable} ${bangers.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-wall-deep font-sans text-fg">
         <WalletProvider>{children}</WalletProvider>

@@ -45,7 +45,7 @@ export function MuseumApp() {
     >
       <header className="fixed inset-x-0 top-0 z-40 border-b border-border/50 bg-wall-deep/55 backdrop-blur-md">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 px-4 sm:h-16 sm:px-6">
-          <Link href="/" className="flex items-baseline gap-2" aria-label="Home">
+          <Link href="/home" className="flex items-baseline gap-2" aria-label="Home">
             <span className="font-serif text-lg font-semibold tracking-tight text-fg sm:text-xl">
               Chill Bugs
             </span>
