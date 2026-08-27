@@ -7,6 +7,22 @@ import { EnterHome } from "@/components/EnterHome";
 export function HomeLanding() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [muted, setMuted] = useState(true);
+  const [needsTap, setNeedsTap] = useState(false);
+
+  const tryPlay = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.playsInline = true;
+    video.setAttribute("playsinline", "");
+    video.setAttribute("webkit-playsinline", "");
+    if (video.muted) {
+      video.setAttribute("muted", "");
+    }
+    const play = video.play();
+    if (play) {
+      void play.then(() => setNeedsTap(false)).catch(() => setNeedsTap(true));
+    }
+  }, []);
 
   const toggleSound = useCallback(() => {
     const video = videoRef.current;
@@ -15,9 +31,9 @@ export function HomeLanding() {
     video.muted = nextMuted;
     setMuted(nextMuted);
     if (video.paused) {
-      void video.play();
+      tryPlay();
     }
-  }, []);
+  }, [tryPlay]);
 
   useEffect(() => {
     const html = document.documentElement;
@@ -32,6 +48,19 @@ export function HomeLanding() {
     };
   }, []);
 
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    tryPlay();
+    const onReady = () => tryPlay();
+    video.addEventListener("canplay", onReady);
+    video.addEventListener("loadeddata", onReady);
+    return () => {
+      video.removeEventListener("canplay", onReady);
+      video.removeEventListener("loadeddata", onReady);
+    };
+  }, [tryPlay]);
+
   return (
     <main className="fixed inset-0 overflow-hidden bg-black text-fg">
       <video
@@ -44,10 +73,23 @@ export function HomeLanding() {
         preload="auto"
         poster="/hero-poster.jpg"
         aria-label="Chill Bugs"
+        controls={false}
+        disablePictureInPicture
         suppressHydrationWarning
+        onClick={tryPlay}
       >
         <source src="/hero.mp4" type="video/mp4" />
       </video>
+
+      {needsTap ? (
+        <button
+          type="button"
+          onClick={tryPlay}
+          className="absolute top-1/2 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2 rounded-full bg-black/60 px-6 py-3 text-sm font-semibold tracking-[0.2em] text-white uppercase backdrop-blur-sm"
+        >
+          Play
+        </button>
+      ) : null}
 
       <Link
         href="/home"

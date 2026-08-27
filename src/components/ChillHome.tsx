@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { HomeHeader } from "@/components/HomeHeader";
 import { SocialIcons } from "@/components/SocialIcons";
 import {
   DISCORD_URL,
@@ -62,75 +63,35 @@ const CARDS: HomeCard[] = [
 export function ChillHome() {
   return (
     <div className="min-h-screen bg-black text-white">
-      <header className="relative z-30 grid grid-cols-[auto_1fr_auto] items-center gap-3 bg-black px-4 py-3 sm:px-8">
-        <Link href="/home" className="shrink-0">
-          <Image
-            src="/logo.png"
-            alt="Chill Bugs"
-            width={160}
-            height={160}
-            priority
-            className="h-28 w-28 object-contain sm:h-40 sm:w-40"
-          />
-        </Link>
-        <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-[11px] font-medium tracking-[0.04em] text-white sm:gap-x-8 sm:text-sm">
-          <Link
-            href="/home"
-            className="decoration-[#d6ff3c] underline decoration-2 underline-offset-[6px]"
-          >
-            Home
-          </Link>
-          <Link href="/museum" className="transition hover:text-[#d6ff3c]">
-            Gallery
-          </Link>
-          <a
-            href={GO_CHILL_URL}
-            target="_blank"
-            rel="noreferrer"
-            className="transition hover:text-[#d6ff3c]"
-          >
-            Go Chill Game
-          </a>
-          <a
-            href={OPENSEA_COLLECTION_URL}
-            target="_blank"
-            rel="noreferrer"
-            className="transition hover:text-[#d6ff3c]"
-          >
-            OpenSea
-          </a>
-        </nav>
-        <SocialIcons className="justify-end" />
-      </header>
+      <HomeHeader />
 
       <div className="relative">
-        <section className="relative isolate min-h-[320px] overflow-hidden sm:min-h-[420px] lg:min-h-[520px]">
+        <section className="md:hidden">
           <Image
             src="/home-hero.jpg"
             alt="Chill Bugs on a sunset road trip"
+            width={1024}
+            height={334}
+            priority
+            className="h-auto w-full"
+          />
+          <HeroCopy className="px-5 py-8" />
+        </section>
+
+        <section className="relative isolate hidden min-h-[420px] overflow-hidden md:block lg:min-h-[520px]">
+          <Image
+            src="/home-hero.jpg"
+            alt=""
             fill
             priority
             sizes="100vw"
             className="object-cover object-[center_42%]"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black from-5% via-black/80 via-35% to-transparent to-70%" />
-          <div className="relative z-10 flex min-h-[320px] max-w-xl flex-col justify-center px-5 py-12 sm:min-h-[420px] sm:px-10 lg:min-h-[520px] lg:pb-36">
-            <h1 className="relative font-sans text-[clamp(2.5rem,7vw,4.75rem)] leading-[0.9] font-extrabold tracking-tight italic">
-              <Sparkles />
-              Stay Chill.
-              <span className="mt-1 block text-[#d6ff3c]">Collect Adventure.</span>
-            </h1>
-            <p className="mt-5 max-w-md text-sm leading-relaxed text-white/90 sm:text-base">
-              Chill Bugs is a laid-back NFT collection of{" "}
-              <span className="font-semibold text-[#d6ff3c]">3,995</span> unique
-              bugs on a mission to spread good vibes and big adventures. Play{" "}
-              <span className="font-semibold text-[#d6ff3c]">Go Chill</span>, and
-              collect with a community that&apos;s always down to chill.
-            </p>
-          </div>
+          <HeroCopy className="relative z-10 flex min-h-[420px] max-w-xl flex-col justify-center px-10 lg:min-h-[520px] lg:pb-36" />
         </section>
 
-        <section className="relative z-20 mx-auto -mt-16 grid max-w-[92rem] grid-cols-1 gap-4 px-4 pb-8 sm:-mt-24 sm:grid-cols-2 sm:px-6 lg:-mt-28 lg:grid-cols-4 lg:px-8">
+        <section className="relative z-20 mx-auto grid max-w-[92rem] grid-cols-1 gap-4 px-4 py-6 sm:grid-cols-2 sm:px-6 md:-mt-24 lg:grid-cols-4 lg:px-8">
           {CARDS.map((card) => (
             <article
               key={card.title}
@@ -199,6 +160,25 @@ export function ChillHome() {
           </a>
         </div>
       </footer>
+    </div>
+  );
+}
+
+function HeroCopy({ className }: { className: string }) {
+  return (
+    <div className={className}>
+      <h1 className="relative font-sans text-[clamp(2.5rem,7vw,4.75rem)] leading-[0.9] font-extrabold tracking-tight italic">
+        <Sparkles />
+        Stay Chill.
+        <span className="mt-1 block text-[#d6ff3c]">Collect Adventure.</span>
+      </h1>
+      <p className="mt-5 max-w-md text-sm leading-relaxed text-white/90 sm:text-base">
+        Chill Bugs is a laid-back NFT collection of{" "}
+        <span className="font-semibold text-[#d6ff3c]">3,995</span> unique bugs
+        on a mission to spread good vibes and big adventures. Play{" "}
+        <span className="font-semibold text-[#d6ff3c]">Go Chill</span>, and
+        collect with a community that&apos;s always down to chill.
+      </p>
     </div>
   );
 }
