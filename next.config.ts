@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  agentRules: false,
   turbopack: {
     root: process.cwd(),
   },
@@ -8,6 +9,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "i.seadn.io", pathname: "/**" },
       { protocol: "https", hostname: "i2.seadn.io", pathname: "/**" },
+      { protocol: "https", hostname: "i2c.seadn.io", pathname: "/**" },
       { protocol: "https", hostname: "openseauserdata.com", pathname: "/**" },
       { protocol: "https", hostname: "raw.seadn.io", pathname: "/**" },
       {

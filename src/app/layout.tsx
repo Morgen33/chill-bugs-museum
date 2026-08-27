@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Figtree } from "next/font/google";
 import { WalletProvider } from "@/components/WalletProvider";
+import { SITE_URL } from "@/lib/constants";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -16,6 +17,7 @@ const figtree = Figtree({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "Chill Bugs",
   description:
     "Chill Bugs — a collection of curious bugs on Ethereum. Follow along on Twitter, OpenSea, and Discord.",

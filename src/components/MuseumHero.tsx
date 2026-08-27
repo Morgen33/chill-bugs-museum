@@ -34,19 +34,10 @@ export function MuseumHero() {
       />
 
       <div className="relative z-10 flex min-h-[100svh] flex-col items-center justify-end px-5 pb-16 pt-28 text-center sm:pb-20 sm:pt-32">
-        <p className="font-serif text-sm tracking-[0.28em] text-gilt uppercase sm:text-base">
-          Now open
-        </p>
-
-        <h1 className="mt-3 max-w-4xl font-serif text-[clamp(3.25rem,12vw,7.5rem)] leading-[0.9] font-semibold tracking-tight text-fg">
+        <h1 className="max-w-4xl font-serif text-[clamp(3.25rem,12vw,7.5rem)] leading-[0.9] font-semibold tracking-tight text-fg">
           Chill Bugs
           <span className="mt-1 block font-medium text-gilt">Museum</span>
         </h1>
-
-        <p className="mt-5 max-w-md text-base leading-relaxed text-fg-muted sm:text-lg">
-          Connect your wallet. Your collection hangs in a private wing — rarer
-          bugs earn the grander gilt frames.
-        </p>
 
         <div className="rk-connect mt-8">
           <ConnectButton
