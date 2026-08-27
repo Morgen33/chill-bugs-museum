@@ -39,14 +39,17 @@ export function MuseumApp() {
     >
       <header className="fixed inset-x-0 top-0 z-40 border-b border-border/50 bg-wall-deep/55 backdrop-blur-md">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:h-16 sm:px-6">
-          <Link href="/" className="flex items-baseline gap-2">
-            <span className="font-serif text-lg font-semibold tracking-tight text-fg sm:text-xl">
+          <div className="flex items-baseline gap-2">
+            <Link
+              href="/"
+              className="font-serif text-lg font-semibold tracking-tight text-fg sm:text-xl"
+            >
               Chill Bugs
-            </span>
+            </Link>
             <span className="hidden font-serif text-sm tracking-[0.2em] text-gilt uppercase sm:inline">
               Museum
             </span>
-          </Link>
+          </div>
           <nav className="hidden items-center gap-7 text-[11px] font-semibold tracking-[0.18em] text-fg-muted uppercase sm:flex">
             <a
               href={OPENSEA_COLLECTION_URL}

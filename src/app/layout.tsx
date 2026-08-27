@@ -16,9 +16,9 @@ const figtree = Figtree({
 });
 
 export const metadata: Metadata = {
-  title: "Chill Bugs Museum",
+  title: "Chill Bugs",
   description:
-    "Connect your wallet and hang your Chill Bugs in a personal gallery wing — rarer bugs earn the grander gilt frames.",
+    "Chill Bugs — a collection of curious bugs on Ethereum. Follow along on Twitter, OpenSea, and Discord.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
