@@ -815,3 +815,79 @@ body {
   --border: rgba(196, 164, 106, 0.18);
   --border-strong: rgba(196, 164, 106, 0.38);
 }
+
+@keyframes enter-bob {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-8px) scale(1.03);
+  }
+}
+
+.enter-home {
+  animation: enter-bob 2.2s ease-in-out infinite;
+}
+
+.enter-home:hover {
+  animation: none;
+  transform: scale(1.08);
+}
+
+.chill-card {
+  border-radius: 1.15rem;
+  background: rgba(7, 7, 12, 0.78);
+  backdrop-filter: blur(10px);
+  border: 1px solid color-mix(in srgb, var(--glow) 80%, white 8%);
+  box-shadow:
+    0 0 10px color-mix(in srgb, var(--glow) 55%, transparent),
+    0 0 34px color-mix(in srgb, var(--glow) 28%, transparent),
+    inset 0 0 22px color-mix(in srgb, var(--glow) 8%, transparent);
+}
+
+.chill-card--pink {
+  --glow: #ff4fd8;
+}
+.chill-card--cyan {
+  --glow: #3ecbff;
+}
+.chill-card--lime {
+  --glow: #d6ff3c;
+}
+.chill-card--violet {
+  --glow: #9b6bff;
+}
+
+.chill-card-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  border-radius: 999px;
+  padding: 0.7rem 1rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--glow);
+  border: 1px solid color-mix(in srgb, var(--glow) 70%, white 10%);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--glow) 35%, transparent);
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.chill-card-btn:hover {
+  background: var(--glow);
+  color: #0a0a0f;
+  box-shadow: 0 0 28px color-mix(in srgb, var(--glow) 55%, transparent);
+}
+
+.chill-card-btn--solid {
+  background: var(--glow);
+  color: #0a0a0f;
+}
+
+.chill-card-btn--solid:hover {
+  filter: brightness(1.08);
+}

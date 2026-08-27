@@ -2,6 +2,7 @@
 
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
 import { useAccount, useDisconnect } from "wagmi";
 import type { BugsApiResponse, ChillBug } from "@/lib/types";
 import { MuseumHero } from "./MuseumHero";
@@ -44,19 +45,14 @@ export function MuseumApp() {
     >
       <header className="fixed inset-x-0 top-0 z-40 border-b border-border/50 bg-wall-deep/55 backdrop-blur-md">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 px-4 sm:h-16 sm:px-6">
-          <button
-            type="button"
-            onClick={goHome}
-            className="flex items-baseline gap-2 text-left"
-            aria-label="Home"
-          >
+          <Link href="/home" className="flex items-baseline gap-2" aria-label="Home">
             <span className="font-serif text-lg font-semibold tracking-tight text-fg sm:text-xl">
               Chill Bugs
             </span>
             <span className="hidden font-serif text-sm tracking-[0.2em] text-gilt uppercase sm:inline">
               Museum
             </span>
-          </button>
+          </Link>
           <nav className="flex items-center gap-5 text-[11px] font-semibold tracking-[0.18em] text-fg-muted uppercase sm:gap-7">
             {inGallery ? (
               <button

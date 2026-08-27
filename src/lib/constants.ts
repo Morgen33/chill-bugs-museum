@@ -7,6 +7,20 @@ export const CHILLBUGS_SLUG = "the-chillbugs";
 export const OPENSEA_COLLECTION_URL =
   "https://opensea.io/collection/the-chillbugs";
 
+export const TWITTER_URL = "https://x.com/TheChillBugs";
+
+export const DISCORD_URL = "https://discord.gg/3S27nh49Hm";
+
+export const GO_CHILL_URL = "https://chillbugs.xyz";
+
+export const SOCIAL_LINKS = [
+  { name: "Twitter", href: TWITTER_URL, icon: "twitter" },
+  { name: "OpenSea", href: OPENSEA_COLLECTION_URL, icon: "opensea" },
+  { name: "Discord", href: DISCORD_URL, icon: "discord" },
+] as const;
+
+export type SocialIcon = (typeof SOCIAL_LINKS)[number]["icon"];
+
 export const SITE_URL = (
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://chill-bugs-museum.vercel.app"
 ).replace(/\/$/, "");
