@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { SocialIcons } from "@/components/SocialIcons";
 import {
   DISCORD_URL,
   GO_CHILL_URL,
@@ -99,7 +100,7 @@ export function ChillHome() {
             OpenSea
           </a>
         </nav>
-        <span className="hidden w-28 sm:block sm:w-40" aria-hidden />
+        <SocialIcons className="justify-end" />
       </header>
 
       <div className="relative">
@@ -183,21 +184,20 @@ export function ChillHome() {
       <footer className="flex flex-col items-start justify-between gap-4 border-t border-[#d6ff3c] bg-black px-5 py-4 sm:flex-row sm:items-center sm:px-8">
         <p className="max-w-xl text-sm text-white/85">
           <span className="mr-2 text-[#d6ff3c]">♡</span>
-          Stay Chill. Stay Connected. Follow us on Twitter for updates, drops,
-          and more good vibes.
+          Stay Chill. Stay Connected. Follow us for updates, drops, and more
+          good vibes.
         </p>
-        <a
-          href={TWITTER_URL}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center gap-3"
-        >
-          <TwitterMark />
-          <span className="text-sm text-[#d6ff3c]">@TheChillBugs</span>
-          <span className="rounded-full bg-[#d6ff3c] px-4 py-2 text-sm font-semibold text-black">
+        <div className="flex flex-wrap items-center gap-5">
+          <SocialIcons />
+          <a
+            href={TWITTER_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-full bg-[#d6ff3c] px-4 py-2 text-sm font-semibold text-black"
+          >
             Follow on Twitter →
-          </span>
-        </a>
+          </a>
+        </div>
       </footer>
     </div>
   );
@@ -212,14 +212,6 @@ function Sparkles() {
         <path d="M6 54 7.6 50 9.2 54 13 55.6 9.2 57.2 7.6 61 6 57.2 2.2 55.6z" />
       </svg>
     </span>
-  );
-}
-
-function TwitterMark() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-5 w-5 fill-white" aria-hidden>
-      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.727-8.835L1.254 2.25H8.08l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-    </svg>
   );
 }
 
