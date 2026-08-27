@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Bangers, Cormorant_Garamond, Figtree } from "next/font/google";
 import { WalletProvider } from "@/components/WalletProvider";
 import { SITE_URL } from "@/lib/constants";
@@ -22,6 +22,11 @@ const bangers = Bangers({
   subsets: ["latin"],
   weight: "400",
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
