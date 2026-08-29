@@ -62,10 +62,10 @@ export function HomeLanding() {
   }, [tryPlay]);
 
   return (
-    <main className="fixed inset-0 overflow-hidden bg-black text-fg">
+    <main className="fixed inset-0 h-[100dvh] w-full overflow-hidden bg-black text-fg">
       <video
         ref={videoRef}
-        className="absolute inset-0 size-full object-cover"
+        className="absolute inset-0 h-full w-full object-contain object-center lg:object-cover"
         autoPlay
         muted
         loop
@@ -93,7 +93,7 @@ export function HomeLanding() {
 
       <Link
         href="/home"
-        className="absolute top-4 left-4 z-30 text-xs font-semibold tracking-[0.22em] text-white/75 uppercase drop-shadow-md transition hover:text-white sm:top-6 sm:left-6"
+        className="absolute top-[max(1rem,env(safe-area-inset-top))] left-4 z-30 text-xs font-semibold tracking-[0.22em] text-white/75 uppercase drop-shadow-md transition hover:text-white sm:top-6 sm:left-6"
       >
         Skip intro
       </Link>
@@ -101,13 +101,13 @@ export function HomeLanding() {
       <button
         type="button"
         onClick={toggleSound}
-        className="absolute top-4 right-4 z-30 rounded-full border border-white/20 bg-black/55 px-3 py-2 text-[11px] font-semibold tracking-[0.18em] text-white/90 uppercase backdrop-blur-sm transition hover:border-white/45 hover:bg-black/75 sm:top-6 sm:right-6"
+        className="absolute top-[max(1rem,env(safe-area-inset-top))] right-4 z-30 rounded-full border border-white/20 bg-black/55 px-3 py-2 text-[11px] font-semibold tracking-[0.18em] text-white/90 uppercase backdrop-blur-sm transition hover:border-white/45 hover:bg-black/75 sm:top-6 sm:right-6"
         aria-label={muted ? "Unmute video" : "Mute video"}
       >
         {muted ? "Sound on" : "Sound off"}
       </button>
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-56 bg-gradient-to-t from-black/65 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-32 bg-gradient-to-t from-black/50 to-transparent lg:h-56 lg:from-black/65" />
 
       <EnterHome />
     </main>
