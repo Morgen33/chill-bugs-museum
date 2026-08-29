@@ -66,7 +66,7 @@ export function ChillHome() {
       <HomeHeader />
 
       <div>
-        <section>
+        <section className="relative">
           <Image
             src="/home-hero.jpg"
             alt="Chill Bugs on a sunset road trip"
@@ -75,10 +75,12 @@ export function ChillHome() {
             priority
             className="h-auto w-full"
           />
-          <HeroCopy className="mx-auto max-w-3xl px-5 py-8 sm:px-10 sm:py-10" />
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/50 via-black/15 to-transparent pt-16 sm:pt-24">
+            <HeroCopy className="max-w-xl px-5 pb-4 drop-shadow-[0_2px_10px_rgba(0,0,0,0.75)] sm:px-10 sm:pb-8" />
+          </div>
         </section>
 
-        <section className="mx-auto grid max-w-[92rem] grid-cols-1 gap-4 px-4 pb-8 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-8">
+        <section className="mx-auto grid max-w-[92rem] grid-cols-1 gap-4 px-4 py-8 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-8">
           {CARDS.map((card) => (
             <article
               key={card.title}
@@ -154,7 +156,7 @@ export function ChillHome() {
 function HeroCopy({ className }: { className: string }) {
   return (
     <div className={className}>
-      <h1 className="relative font-sans text-[clamp(2.5rem,7vw,4.75rem)] leading-[0.9] font-extrabold tracking-tight italic">
+      <h1 className="relative pl-8 font-sans text-[clamp(1.85rem,6vw,4.75rem)] leading-[0.9] font-extrabold tracking-tight italic sm:pl-0">
         <Sparkles />
         Stay Chill.
         <span className="mt-1 block text-[#d6ff3c]">Collect Adventure.</span>
@@ -172,7 +174,7 @@ function HeroCopy({ className }: { className: string }) {
 
 function Sparkles() {
   return (
-    <span className="absolute top-2 -left-7 hidden text-[#d6ff3c] sm:block" aria-hidden>
+    <span className="absolute top-1 left-0 text-[#d6ff3c] sm:top-2 sm:-left-7" aria-hidden>
       <svg viewBox="0 0 36 72" className="h-16 w-8 fill-current">
         <path d="M8 14 10.2 8 12.4 14 18 16.2 12.4 18.4 10.2 24 8 18.4 2.4 16.2z" />
         <path d="M22 36 24.6 28 27.2 36 35 38.6 27.2 41.2 24.6 49 22 41.2 14.2 38.6z" />
